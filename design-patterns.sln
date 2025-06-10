@@ -1,0 +1,32 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.2.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "creational-patterns", "creational-patterns", "{E5E4D9DF-0D01-6AF5-4E15-DDB8A6827B28}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "factory-method", "factory-method", "{977633D4-A1D5-87AC-4F5E-04215F2D0241}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "devgalop.learn.factory_method", "creational-patterns\factory-method\devgalop.learn.factory_method\devgalop.learn.factory_method.csproj", "{D3875BEC-1BA9-4373-02A1-ADCF8336C391}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D3875BEC-1BA9-4373-02A1-ADCF8336C391}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D3875BEC-1BA9-4373-02A1-ADCF8336C391}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D3875BEC-1BA9-4373-02A1-ADCF8336C391}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D3875BEC-1BA9-4373-02A1-ADCF8336C391}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{977633D4-A1D5-87AC-4F5E-04215F2D0241} = {E5E4D9DF-0D01-6AF5-4E15-DDB8A6827B28}
+		{D3875BEC-1BA9-4373-02A1-ADCF8336C391} = {977633D4-A1D5-87AC-4F5E-04215F2D0241}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F135A4D0-90D6-47BA-B8D8-D5750660F631}
+	EndGlobalSection
+EndGlobal
