@@ -18,6 +18,6 @@ Luego de un tiempo, la empresa decide por estrategia comercial, empezar a operar
 ## Solucion:
 El patrón *Factory Method* propone la creación de una *interface* llamada **IFile** la cual sirve de base a cualquier tipo de archivo que se desee agregar al sistema. Adicionalmente, propone la creación de una clase abstracta **FileFactory** con la que se delega toda la creación de los diferentes archivos.
 
-
+![arquitectura_factory_method](resources/arq_factory_method.drawio.png)
 
 Si desea conocer o profundizar más, dirijase a la [fuente](design-patterns/factory-method).
