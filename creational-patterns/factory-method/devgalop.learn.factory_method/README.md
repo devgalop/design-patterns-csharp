@@ -20,4 +20,4 @@ El patrón *Factory Method* propone la creación de una *interface* llamada **IF
 
 ![arquitectura_factory_method](resources/arq_factory_method.drawio.png)
 
-Si desea conocer o profundizar más, dirijase a la [fuente](design-patterns/factory-method).
+Si desea conocer o profundizar más, dirijase a la [fuente](https://refactoring.guru/design-patterns/factory-method).
