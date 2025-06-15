@@ -8,7 +8,7 @@ Uno de los primeros libros en tratar estos patrones se le conoce como **GoF** (G
 
 Según [Refactorin Guru](https://refactoring.guru/design-patterns) los patrones de diseño aunque no se aplican siempre y no se aplican todos a la vez, estos son un conjunto de herramientas que nos preparan para resolver problemas recurrentes y nos dan un lenguaje común para comunicarnos dentro del equipo de manera efectiva.
 
-Los patrones de diseño nos permite escribir código utilizando las mejores prácticas para que este sea *estructurado*, *administrable* y *escalable* [ver más...](www.geekforgeeks.org/system-design/software-design-patterns).
+Los patrones de diseño nos permite escribir código utilizando las mejores prácticas para que este sea *estructurado*, *administrable* y *escalable* [ver más...](https://www.geeksforgeeks.org/system-design/software-design-patterns).
 
 Para [Refactoring Guru](https://refactoring.guru/design-patterns/classification) los patrones de diseño se dividen en 2 grandes grupos:
 - **Idioms** : Son los más básicos y a bajo nivel. Estos no son replicables dentro de todos los lenguajes de programación ya que son soluciones aplicadas a cada lenguaje.
