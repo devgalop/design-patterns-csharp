@@ -1,4 +1,3 @@
-# Patrones de diseño
 # Factory Method 
 
 El patrón de diseño *Factory Method* forma parte de los patrones creacionales. Éste nos facilita la creación de objetos a través de una *interface* y una super clase (*Factory*).
