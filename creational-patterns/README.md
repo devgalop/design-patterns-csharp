@@ -6,7 +6,7 @@ Estos patrones creacionales ayudan a desacoplar el sistema de la creación de lo
 
 Los patrones de diseño creacionales son:
 
-- [Factory Method](factoy-method/devgalop.learn.factory_method): Provee una interfaz para la creacion de objetos en una super clase llamada *Factory*. [Conocer más ...](factoy-method/devgalop.learn.factory_method)
+- [Factory Method](factory-method/devgalop.learn.factory_method): Provee una interfaz para la creacion de objetos en una super clase llamada *Factory*. [Conocer más ...](factory-method/devgalop.learn.factory_method)
 - [Abstract Factory](abstract-factory/devgalop.learn.abstract_factory): Permite la construcción de familias de objetos sin una clase especifica. [Conocer más ...](abstract-factory/devgalop.learn.abstract_factory)
 - [Builder](builder/devgalop.learn.builder): Permite la creacion de objetos complejos paso a paso [Conocer más ...](builder/devgalop.learn.builder)
 - [Prototype](prototype/devgalop.learn.prototype): Genera copias o clones a partir de un objeto existente sin depender de la clase [Conocer más ...](prototype/devgalop.learn.prototype)
