@@ -2,12 +2,16 @@
 
 ## Componentes del patron **Singleton**
 
+
+![singleton_components](resources/singleton_components.drawio.png)
+
 ## Ejemplo Aplicado
 
 ## Problema:
 
 ## Solucion:
 
+![arq_singleton](resources/arq_singleton.drawio.png)
 
 Si desea conocer o profundizar más, dirijase a las fuentes
 
