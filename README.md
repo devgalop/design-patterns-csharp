@@ -19,7 +19,7 @@ Para [Refactoring Guru](https://refactoring.guru/design-patterns/classification)
 
 - **Patrones Creacionales**: Estos patrones proveen mecanismos para la creacion de objetos de manera eficiente y permitiendo reutilizar código existente. [ver más...](creational-patterns)
 
-- **Patrones Estructurales**: Son los encargados de explicar cómo ensamblar objetos y clases dentro de largas estructuras manteniendo estas estructuras flexibles y eficientes.
+- **Patrones Estructurales**: Son los encargados de explicar cómo ensamblar objetos y clases dentro de largas estructuras manteniendo estas estructuras flexibles y eficientes. [ver más...](structural-patterns)
 
 - **Patrones de Comportamiento**: Se encargan de la comunicación efectiva entre los objetos y asignación de responsabilidades.
 
