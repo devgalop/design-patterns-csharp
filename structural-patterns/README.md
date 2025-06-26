@@ -6,4 +6,4 @@ Para [Geek for Geeks](https://www.geeksforgeeks.org/system-design/structural-des
 
 Los patrones de diseño estructurales son:
 
-- [Adapter](adapter): Este patrón de diseño permite a dos objetos con interfaces incompatibles, poder trabajar juntos a través de un adaptador [ver más ...](structural-)
+- [Adapter](adapter/devgalop.learn.adapter): Este patrón de diseño permite a dos objetos con interfaces incompatibles, poder trabajar juntos a través de un adaptador [ver más ...](adapter/devgalop.learn.adapter)
