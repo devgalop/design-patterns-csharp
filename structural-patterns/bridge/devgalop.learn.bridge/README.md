@@ -4,7 +4,7 @@
 ## Componentes del patron **Bridge**
 
 
-![bridge_components]()
+![bridge_components](resources/bridge_components.drawio.png)
 
 ## Ejemplo Aplicado
 
@@ -18,7 +18,7 @@ Para efectos de ejemplo, se creará un problema ficticio el cual se resolverá a
 
 
 
-![arq_bridge]()
+![arq_bridge](resources/arq_bridge.drawio.png)
 
 Si desea conocer o profundizar más, dirijase a las fuentes
 
