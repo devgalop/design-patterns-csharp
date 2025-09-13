@@ -4,7 +4,7 @@ Los patrones de diseño creacionales proveen mecanismos para la creación de obj
 
 Estos patrones creacionales se encarga de desacoplar el sistema de la creación de los objetos, es decir, el sistema es independiente a cómo se crean los objetos, cómo se componen y cómo se representan [según Geek for Geeks](https://www.geeksforgeeks.org/system-design/software-design-patterns/#creational-design-patterns).
 
---
+---
 
 ## ¿Cuáles son estos patrones?
 

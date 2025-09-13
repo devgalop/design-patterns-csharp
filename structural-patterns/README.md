@@ -4,7 +4,7 @@ Los patrones de diseño estructurales se encargan de mostrar cómo se deben orga
 
 Para [Geek for Geeks](https://www.geeksforgeeks.org/system-design/structural-design-patterns/) los patrones de diseño estructurales, resuelven los problemas que tienen que ver en cómo las clases y objetos son compuestos y ensamblados. Simplifica el manejo de jerarquias complejas.
 
---
+---
 
 ## ¿Cuáles son estos patrones?
 
