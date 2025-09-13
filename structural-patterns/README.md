@@ -1,10 +1,19 @@
 # Patrones de diseño estructurales
 
-Los patrones de diseño estructurales explican cómo se deben ensamblar diferentes objetos y clases dentro de largas estructuras, manteniendo su flexibilidad y eficiencia [Refactoring Guru](https://refactoring.guru/design-patterns/structural-patterns).
+Los patrones de diseño estructurales se encargan de mostrar cómo se deben organizar y componer las clases y objetos, explican cómo se deben ensamblar, permitiendo flexibilidad en sistemas complejos. [Refactoring Guru](https://refactoring.guru/design-patterns/structural-patterns).
 
-Para [Geek for Geeks](https://www.geeksforgeeks.org/system-design/structural-design-patterns/) los patrones de diseño estructurales, resuelven los problemas que tienen que ver en cómo las clases y objetos son compuestos y ensamblados. La clase estructural suele utilizar la herencia para componer interfaces o sus implementaciones. Simplifica el manejo de jerarquias complejas.
+Para [Geek for Geeks](https://www.geeksforgeeks.org/system-design/structural-design-patterns/) los patrones de diseño estructurales, resuelven los problemas que tienen que ver en cómo las clases y objetos son compuestos y ensamblados. Simplifica el manejo de jerarquias complejas.
+
+--
+
+## ¿Cuáles son estos patrones?
 
 Los patrones de diseño estructurales son:
 
-- [Adapter](adapter/devgalop.learn.adapter): Este patrón de diseño permite a dos objetos con interfaces incompatibles, poder trabajar juntos a través de un adaptador [ver más ...](adapter/devgalop.learn.adapter)
-- [Bridge](bridge/devgalop.learn.bridge): Este patrón de diseño permite a fragmentar jerarquias de clases muy grandes en dos grandes grupos de jerarquías (*Abstractions* e *Implementations*) donde cada una puede ser desarrollada de manera independiente. [ver más ...](bridge/devgalop.learn.bridge)
+- [Adapter](adapter/devgalop.learn.adapter): Este patrón permite que objetos que provienen de interfaces incompatibles, puedan trabajar juntos a través de un adaptador [ver más ...](adapter/devgalop.learn.adapter)
+- [Bridge](bridge/devgalop.learn.bridge): Este patrón permite separar jerarquías que crecen de manera independiente en dos grupos *Abstractions* e *Implementations*, para que cada una puede ser desarrollada y/o modificada sin afectar a la otra. [ver más ...](bridge/devgalop.learn.bridge)
+- [Composite](composite/devgalop.learn.composite): Este patrón permite que el cliente trabaje con objetos simples o compuestos de la misma manera, es un patrón que solo se aplica en jerarquias tipo árbol.
+- Decorator: Este patrón permite añadir nuevas funcionalidades a un objeto sin modificar su codigo principal. Funciona cómo una envoltura, donde se van añadiendo cada vez más capas al objeto inicial.
+- Facade
+- Flyweight
+- Proxy
