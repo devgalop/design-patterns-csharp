@@ -16,8 +16,8 @@ Los patrones de diseño nos permite escribir código utilizando las mejores prá
 
 Los patrones de arquitectura son los más universales, son soluciones a alto nivel aplicadas en cualquier lenguaje de programación que permita la orientación a objetos. Adicionalmente, estos patrones son categorizados según su intención y proposito en los siguientes grupos: *Patrones Creacionales*, *Patrones Estructurales*, *Patrones de Comportamiento*
 
-- **Patrones Creacionales**: Estos patrones proveen mecanismos para la creacion de objetos de manera eficiente, desacoplando la creación de objetos de nuestro código. [ver más...](creational-patterns)
+- **Patrones Creacionales**: Estos patrones proveen mecanismos para la creacion de objetos de manera eficiente, desacoplando la creación de objetos de nuestro código. [ver más...](creational-patterns/README.Creationals.md)
 
-- **Patrones Estructurales**: Estos patrones nos enseñan como organizar y componer clases u objetos para formar sistemas complejos de manera sencilla. [ver más...](structural-patterns)
+- **Patrones Estructurales**: Estos patrones nos enseñan como organizar y componer clases u objetos para formar sistemas complejos de manera sencilla. [ver más...](structural-patterns/README.Structurals.md)
 
 - **Patrones de Comportamiento**: Estos patrones se encargan de cómo se comunican, interactuan y se dividen responsabilidades los objetos.
