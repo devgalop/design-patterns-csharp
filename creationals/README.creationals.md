@@ -128,9 +128,10 @@ El patrón de diseño *Abstract Factory* permite la creación de familias de obj
 - **¿Cuándo usar este patrón?**
 
 Este patrón se suele utilizar en los siguientes casos:
-    - Cuando el sistema requiera de multiples familias de objetos relacionados y se necesita asegurar su compatibilidad.
-    - Cuando se requiera dejar la puerta abierta para futuras extensiones de objetos relacionados
-    - Cuando se tienen varios *Factory Method* relacionados.
+  
+  1. Cuando el sistema requiera de multiples familias de objetos relacionados y se necesita asegurar su compatibilidad.
+  2. Cuando se requiera dejar la puerta abierta para futuras extensiones de objetos relacionados
+  3. Cuando se tienen varios *Factory Method* relacionados.
 
 - **¿Cuales son sus componentes?**
 
@@ -198,7 +199,7 @@ public class AlpinestarJacket : IJacket{
 
   public List<string> GetAvailableSizes(){
     //Busca las tallas disponibles para la chaqueta Alpinestar
-    return new List<string> { "M", "L", "XL" };
+    return ["M", "L", "XL"];
   }
 }
 public class RichaJacket : IJacket{
@@ -210,7 +211,7 @@ public class RichaJacket : IJacket{
 
   public List<string> GetAvailableSizes(){
     //Busca las tallas disponibles para la chaqueta Richa
-    return new List<string> { "L", "XL" };
+    return ["L", "XL"];
   }
 }
 public class DaineseJacket : IJacket{
@@ -222,7 +223,7 @@ public class DaineseJacket : IJacket{
 
   public List<string> GetAvailableSizes(){
     //Busca las tallas disponibles para la chaqueta Dainese
-    return new List<string> { "M", "L" };
+    return ["M", "L"];
   }
 }
 
@@ -315,7 +316,11 @@ public class DaineseFactory : IFactory{
 }
 ```
 
+De esta manera si llega a entrar una nueva marca a la tienda, basta con agregar las implementaciones concretas.
+
 [Volver a Indice](#tabla-de-contenido)
+
+---
 
 ### Builder
 
@@ -326,10 +331,11 @@ El patrón de diseño *Builder* permite la creación de objetos complejos a trav
 - **¿Cuándo usar este patrón?**
 
 Este patrón de diseño suele utilizarce en los siguientes escenarios:
-    - Cuando se necesite crear objetos complejos que tiene muchos parametros opcionales
-    - Cuando la construccion de un objeto se necesita hacer de un determinado orden o ejecutar una serie de pasos.
-    - Cuando se tiene metodos constructores con muchos parametros
-    - Cuando se requiere de una interfaz común para construir diferentes objetos.
+
+  1. Cuando se necesite crear objetos complejos que tiene muchos parametros opcionales
+  2. Cuando la construccion de un objeto se necesita hacer de un determinado orden o ejecutar una serie de pasos.
+  3. Cuando se tiene metodos constructores con muchos parametros
+  4. Cuando se requiere de una interfaz común para construir diferentes objetos.
 
 - **¿Cuales son sus componentes?**
 
@@ -343,6 +349,104 @@ Este patrón de diseño suele utilizarce en los siguientes escenarios:
 ![diagrama_factory_method](resources/builder_components.drawio.png)
 
 - **Ejemplo**
+
+Para aplicar el patrón **Builder** usaremos un ejemplo de una aplicación que utilizan para vender pizzas. Se tiene en cuenta que existe una base para la pizza que lleva pasta de tomate y queso, sin embargo en la tienda tienen diferentes combinaciones posibles como: agregar aros de cebolla, agregar tocino, agregar champiñones, agregar albaca fresca, etc.
+
+En este ejemplo el patrón builder nos permite construir la pizza sin tener un constructor lleno de parámetros opcionales.
+
+```csharp
+// Crea el producto
+public class Pizza{
+  private string _description;
+  private double _price;
+
+  public Pizza(){
+    _description = "Base Pizza";
+    _price = 10.25;
+  }
+
+  public void AddComplement(string description, double value){
+    _description += $" + {description}";
+    _price += value;
+  }
+
+  public string GetDescription(){
+    return _description;
+  }
+
+  public double GetPrice(){
+    return _price;
+  } 
+}
+
+// Crea la clase Builder
+public interface IPizzaBuilder{
+  IPizzaBuilder AddOnionRings();
+  IPizzaBuilder AddBacon();
+  IPizzaBuilder AddMushrooms();
+  IPizzaBuilder AddBasil();
+  Pizza GetPizza();
+}
+
+// Implementación concreta del builder
+public class PizzaBuilder : IPizzaBuilder{
+  private Pizza _basePizza;
+
+  public PizzaBuilder(){
+    _basePizza = new Pizza();
+  }
+
+  public IPizzaBuilder AddOnionRings(){
+    _basePizza.AddComplement("Crispy Onion Rings", 1.20);
+    return this;
+  }
+
+  public IPizzaBuilder AddBacon(){
+    _basePizza.AddComplement("Crispy Bacon", 1.70);
+    return this;
+  }
+
+  public IPizzaBuilder AddMushrooms(){
+    _basePizza.AddComplement("Mushrooms", 2);
+    return this;
+  }
+
+  public IPizzaBuilder AddBasil(){
+    _basePizza.AddComplement("Fresh Basil", 0.75);
+    return this;
+  }
+
+  public Pizza GetPizza(){
+    return _basePizza;
+  }
+}
+
+// Crea la clase director para que se encargue de orquestar los pasos
+public class PizzaBuilderDirector{
+  private IPizzaBuilder _builder;
+
+  public PizzaBuilderDirector(IPizzaBuilder builder){
+    _builder = builder;
+  }
+
+  public Pizza GetBasicPizza(){
+    return _builder.GetPizza();
+  }
+
+  public Pizza GetCrispyOnionPizza(){
+    return _builder.AddOnionRings()
+                   .AddBacon()
+                   .GetPizza();
+  }
+
+  public Pizza GetMargaritaPizza(){
+    return _builder.AddBasil()
+                   .GetPizza();
+  }
+}
+```
+
+En caso de que el restaurante necesite agregar más sabores de pizza a su menú bastaría solo con agregar los componentes y/o la orquestacion dentro del director.
 
 [Volver a Indice](#tabla-de-contenido)
 
