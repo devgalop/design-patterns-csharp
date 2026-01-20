@@ -60,38 +60,28 @@ public interface IFile{
 public class CSVFile: IFile{
 
   public async Task<string> Read(string filePath){
-    string readLines = string.Empty;
-
-    //implementa la lógica propia de lectura
-
-    return readLines;
+    // Simula la lectura de un archivo CSV
+    await Task.Delay(100); // Simula una operación asincrónica
+    return "Contenido del archivo CSV";
   }
 
   public bool IsValidExtension(string extension){
-    bool isValid;
-
-    //Implementa lógica propia para CSV
-
-    return isValid;
+    // Verifica si la extensión es válida para un archivo CSV
+    return extension.Equals(".csv", StringComparison.OrdinalIgnoreCase);
   }
 }
 
 public class JSONFile: IFile{
 
   public async Task<string> Read(string filePath){
-    string readLines = string.Empty;
-
-    //implementa la lógica propia de lectura
-
-    return readLines;
+    // Simula la lectura de un archivo JSON
+    await Task.Delay(100); // Simula una operación asincrónica
+    return "Contenido del archivo JSON";
   }
 
   public bool IsValidExtension(string extension){
-    bool isValid;
-
-    //Implementa lógica propia para JSON
-
-    return isValid;
+    // Verifica si la extensión es válida para un archivo JSON
+    return extension.Equals(".json", StringComparison.OrdinalIgnoreCase);
   }
 }
 
@@ -103,11 +93,10 @@ public abstract class BaseFileFactory{
 }
 
 // Creamos cada una de las implementaciones del Factory
-public class CSVFactory : BaseFilefactory{
+public class CSVFactory : BaseFileFactory{
 
   public override IFile CreateFile(){
-
-    //Implementación propia para archivos CSV
+    // Retorna una nueva instancia de CSVFile
     return new CSVFile();    
   }
 }
@@ -115,13 +104,14 @@ public class CSVFactory : BaseFilefactory{
 public class JSONFactory : BaseFileFactory{
 
   public override IFile CreateFile(){
-
-    //Implementación propia para archivos JSON
+    // Retorna una nueva instancia de JSONFile
     return new JSONFile();    
   }
 }
 
 ```
+
+De esta manera, cuando se requiera implementar un nuevo tipo de archivo, basta con crear la entidad del producto implementando la interfaz *IFile* y crear el factory respectivo heredando la clase BaseFileFactory.
 
 [Volver a Indice](#tabla-de-contenido)
 
