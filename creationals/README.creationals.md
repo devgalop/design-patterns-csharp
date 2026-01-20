@@ -450,6 +450,8 @@ En caso de que el restaurante necesite agregar más sabores de pizza a su menú 
 
 [Volver a Indice](#tabla-de-contenido)
 
+---
+
 ### Prototype
 
 - **Definición**
@@ -476,7 +478,32 @@ Este patrón de diseño suele utilizarce en los siguientes escenarios:
 
 - **Ejemplo**
 
+Para aplicar el patrón **Prototype** vamos a simular un sistema donde existe una entidad Empleado, la cual tiene asignado un rol. Asumamos que crear una entidad empleado es complicado, por lo que tenemos que reutilizar el objeto existente.
+
+```csharp
+// Creo la interfaz que permite la clonación
+public interface IPrototype<T>{
+  T Clone();
+}
+
+// Creo la entidad Empleado
+public class Employee : IPrototype<Employee>{
+  private string _role;
+
+  public Employee(string role){
+    _role = role;
+  }
+
+  public Employee Clone(){
+    // Retorna una copia exacta (deep copy si es necesario)
+    return (Employee)this.MemberwiseClone();
+  }
+}
+```
+
 [Volver a Indice](#tabla-de-contenido)
+
+---
 
 ### Singleton
 
@@ -501,5 +528,37 @@ Este patrón de diseño se suele utilizar en los siguientes casos:
 ![diagrama_factory_method](resources/singleton_components.drawio.png)
 
 - **Ejemplo**
+
+El patrón **Singleton** es uno de los patrones que se debe aplicar con mucho cuidado ya que este complica el desarrollo de pruebas unitarias y adicional crea acoplamiento en el código. No obstante, si se identifica que es necesario aplicarlo, el ejemplo más común es utilizar la conexión a una base de datos.
+
+El código para aplicar este patrón es
+
+```csharp
+public class Database{
+  // Se debe tener una instancia estática
+  private static Database? _instance;
+
+  private static readonly Lock _lock = new();
+  
+  // El constructor de la clase debe ser privado
+  private Database(){
+    uuid = Guid.NewGuid().ToString();
+  }
+
+  public string uuid { get; set; }
+
+  // Debe existir un método estático que permita crear la instancia en caso de que no exista 
+  // En caso de que exista, debe retornarla.
+  public static Database GetInstance(){
+    if(_instance is null){
+        lock (_lock){
+          _instance ?? = new();
+          uuid = Guid.NewGuid().ToString();
+        }
+    }
+    return _instance;
+  }
+}
+```
 
 [Volver a Indice](#tabla-de-contenido)
