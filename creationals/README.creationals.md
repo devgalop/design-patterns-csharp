@@ -47,6 +47,82 @@ Es un patrón que se debe usar cuando se necesite **dejar el código abierto a n
 
 - **Ejemplo**
 
+Para ejemplificar el patrón Factory Method, pensemos en una aplicación que debe manejar distintos tipos de archivos de entrada para sus procesos. Actualmente, solo se tienen implementados los archivos CSV y JSON, pero se tiene presente que en un futuro cercano se está pensando en integrar XML y otros archivos más.
+
+```csharp
+// Creamos una interfaz Product para los tipos de archivos
+public interface IFile{
+  Task<string> Read(string filePath);
+  bool IsValidExtension(string extension);
+}
+
+// Creamos cada uno de los productos concretos
+public class CSVFile: IFile{
+
+  public async Task<string> Read(string filePath){
+    string readLines = string.Empty;
+
+    //implementa la lógica propia de lectura
+
+    return readLines;
+  }
+
+  public bool IsValidExtension(string extension){
+    bool isValid;
+
+    //Implementa lógica propia para CSV
+
+    return isValid;
+  }
+}
+
+public class JSONFile: IFile{
+
+  public async Task<string> Read(string filePath){
+    string readLines = string.Empty;
+
+    //implementa la lógica propia de lectura
+
+    return readLines;
+  }
+
+  public bool IsValidExtension(string extension){
+    bool isValid;
+
+    //Implementa lógica propia para JSON
+
+    return isValid;
+  }
+}
+
+// Creamos la clase abstracta Creator
+public abstract class BaseFileFactory{
+
+  public abstract IFile CreateFile();
+
+}
+
+// Creamos cada una de las implementaciones del Factory
+public class CSVFactory : BaseFilefactory{
+
+  public override IFile CreateFile(){
+
+    //Implementación propia para archivos CSV
+    return new CSVFile();    
+  }
+}
+
+public class JSONFactory : BaseFileFactory{
+
+  public override IFile CreateFile(){
+
+    //Implementación propia para archivos JSON
+    return new JSONFile();    
+  }
+}
+
+```
+
 [Volver a Indice](#tabla-de-contenido)
 
 ---
