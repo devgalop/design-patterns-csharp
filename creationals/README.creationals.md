@@ -1,5 +1,7 @@
 # Patrones Creacionales
 
+## Definición
+
 Los patrones de diseño creacionales proveen mecanismos para la creación de objetos, de manera que, el código sea fuertemente dependiente de estos. De esta manera se obtiene un código abierto a nuevas implementaciones. [según Refactoring  Guru](https://refactoring.guru/design-patterns/creational-patterns).
 
 Estos patrones creacionales se encarga de desacoplar el sistema de la creación de los objetos, es decir, el sistema es independiente a cómo se crean los objetos, cómo se componen y cómo se representan [según Geek for Geeks](https://www.geeksforgeeks.org/system-design/software-design-patterns/#creational-design-patterns).
@@ -47,7 +49,7 @@ Es un patrón que se debe usar cuando se necesite **dejar el código abierto a n
 
 - **Ejemplo**
 
-Para ejemplificar el patrón Factory Method, pensemos en una aplicación que debe manejar distintos tipos de archivos de entrada para sus procesos. Actualmente, solo se tienen implementados los archivos CSV y JSON, pero se tiene presente que en un futuro cercano se está pensando en integrar XML y otros archivos más.
+Para ejemplificar el patrón **Factory Method**, pensemos en una aplicación que debe manejar distintos tipos de archivos de entrada para sus procesos. Actualmente, solo se tienen implementados los archivos CSV y JSON, pero se tiene presente que en un futuro cercano se está pensando en integrar XML y otros archivos más.
 
 ```csharp
 // Creamos una interfaz Product para los tipos de archivos
@@ -142,6 +144,176 @@ Este patrón se suele utilizar en los siguientes casos:
 ![diagrama_factory_method](resources/abstract_factory_components.drawio.png)
 
 - **Ejemplo**
+
+Un ejemplo perfecto para aplicar el patrón **Abstract Factory** es el siguiente: Supongamos que se está creando una aplicacion para una tienda que vende indumentarias de moto por marca, dentro de las indumentarias se tienen prendas como Cascos, Chaquetas y Pantalones. La tienda dentro de sus marcas tiene Alpinestar, Richa y Dainese.
+
+El patrón es perfectamente aplicable ya que cada marca representa una familia de productos. Desde el código se vería así
+
+```csharp
+// Creamos las interfaces de cada tipo de producto
+// IHelmet: interfaz para las implementaciones de todos los cascos.
+public interface IHelmet{
+  string GetCertification();
+}
+// IJacket: interfaz para las implementaciones de las chaquetas.
+public interface IJacket{
+  string GetDescription();
+  List<string> GetAvailableSizes();
+}
+// IPants: interfaz para las implementaciones de los pantalones.
+public interface IPants{
+  string GetDescription();
+  string GetGuarantee();
+}
+
+// Se crean las clases concretas para cada tipo de producto
+public class AlpinestarHelmet : IHelmet{
+
+  public string GetCertification(){
+    //Implementación de lógica propia para el casco Alpinestar
+    return "Alpinestar Helmet certification";
+  }
+}
+public class RichaHelmet : IHelmet{
+
+  public string GetCertification(){
+    //Implementación de lógica propia para el casco Richa
+    return "Richa Helmet certification";
+  }
+}
+public class DaineseHelmet : IHelmet{
+
+  public string GetCertification(){
+    //Implementación de lógica propia para el casco Dainese
+    return "Dainese Helmet certification";
+  }
+}
+
+public class AlpinestarJacket : IJacket{
+
+  public string GetDescription(){
+    //Implementación de lógica propia para la chaqueta Alpinestar
+    return "Alpinestar Jacket description";
+  }
+
+  public List<string> GetAvailableSizes(){
+    //Busca las tallas disponibles para la chaqueta Alpinestar
+    return new List<string> { "M", "L", "XL" };
+  }
+}
+public class RichaJacket : IJacket{
+
+  public string GetDescription(){
+    //Implementación de lógica propia para la chaqueta Richa
+    return "Richa Jacket description";
+  }
+
+  public List<string> GetAvailableSizes(){
+    //Busca las tallas disponibles para la chaqueta Richa
+    return new List<string> { "L", "XL" };
+  }
+}
+public class DaineseJacket : IJacket{
+
+  public string GetDescription(){
+    //Implementación de lógica propia para la chaqueta Dainese
+    return "Dainese Jacket description";
+  }
+
+  public List<string> GetAvailableSizes(){
+    //Busca las tallas disponibles para la chaqueta Dainese
+    return new List<string> { "M", "L" };
+  }
+}
+
+public class AlpinestarPants : IPants{
+
+  public string GetDescription(){
+    //Implementación de lógica propia para el pantalón Alpinestar
+    return "Alpinestar Pants description";
+  }
+
+  public string GetGuarantee(){
+    return "Alpinestar Pants guarantee";
+  }
+}
+public class RichaPants : IPants{
+
+  public string GetDescription(){
+    //Implementación de lógica propia para el pantalón Richa
+    return "Richa Pants description";
+  }
+
+  public string GetGuarantee(){
+    return "Richa Pants guarantee";
+  }
+}
+public class DainesePants : IPants{
+
+  public string GetDescription(){
+    //Implementación de lógica propia para el pantalón Dainese
+    return "Dainese Pants description";
+  }
+
+  public string GetGuarantee(){
+    return "Dainese Pants guarantee";
+  }
+}
+
+
+// Creamos la interfaz que ejerce la función de Abstract Factory
+public interface IFactory{
+  IHelmet CreateHelmet();
+  IJacket CreateJacket();
+  IPants CreatePants();
+}
+
+// Creamos cada uno de las Factory concretas por marca
+public class AlpinestarFactory : IFactory{
+
+  public IHelmet CreateHelmet(){
+    return new AlpinestarHelmet();
+  }
+
+  public IJacket CreateJacket(){
+    return new AlpinestarJacket();
+  }
+
+  public IPants CreatePants(){
+    return new AlpinestarPants();
+  }
+}
+
+public class RichaFactory : IFactory{
+
+  public IHelmet CreateHelmet(){
+    return new RichaHelmet();
+  }
+
+  public IJacket CreateJacket(){
+    return new RichaJacket();
+  }
+
+  public IPants CreatePants(){
+    return new RichaPants();
+  }
+}
+
+public class DaineseFactory : IFactory{
+
+  public IHelmet CreateHelmet(){
+    return new DaineseHelmet();
+  }
+
+  public IJacket CreateJacket(){
+    return new DaineseJacket();
+  }
+
+  public IPants CreatePants(){
+    return new DainesePants();
+  }
+}
+```
 
 [Volver a Indice](#tabla-de-contenido)
 
