@@ -34,7 +34,21 @@ El patrón de diseño *Factory Method* nos facilita la creación de objetos a tr
 
 - **¿Cuándo usar este patrón?**
 
-Es un patrón que se debe usar cuando se necesite **dejar el código abierto a nuevas implementaciones** de objetos o cuando **no se conozca la totalidad de los objetos** con los que debe interactuar el sistema.
+✅ **Úsalo cuando:**
+
+- Necesites crear diferentes tipos de objetos que comparten una interfaz común
+- El tipo exacto de objeto a crear se determina en tiempo de ejecución
+- Anticipas que nuevos tipos de objetos serán agregados frecuentemente
+- La lógica de creación es compleja y quieres encapsularla en un solo lugar
+
+❌ **NO lo uses cuando:**
+
+- Solo tienes 2-3 tipos de objetos que rara vez cambian (usa `if/switch` o inyección de dependencias)
+- La creación del objeto es trivial (ej: `new User()`)
+- Agregas factories "por si acaso" sin una necesidad actual o futura clara
+  
+💡 **Señal de sobreingeniería:**  
+Si nunca has necesitado agregar un nuevo tipo de objeto en 6+ meses, probablemente no necesitabas el patrón.
 
 - **¿Cuales son sus componentes?**
 
@@ -127,11 +141,22 @@ El patrón de diseño *Abstract Factory* permite la creación de familias de obj
 
 - **¿Cuándo usar este patrón?**
 
-Este patrón se suele utilizar en los siguientes casos:
+✅ **Úsalo cuando:**
+
+- Necesitas crear **familias completas** de objetos relacionados que deben ser compatibles entre sí
+- Tienes múltiples variantes del mismo conjunto de productos (ej: temas UI, diferentes proveedores)
+- Quieres garantizar que los objetos de una familia no se mezclen con otra
+- Ya tienes 3+ Factory Methods que siempre trabajan juntos
+
+❌ **NO lo uses cuando:**
+
+- Solo tienes una familia de productos (usa Factory Method simple)
+- Los productos no necesitan ser compatibles entre sí
+- Tienes menos de 2 variantes completas de la familia
+- Agregas "familias" artificiales solo por usar el patrón
   
-  1. Cuando el sistema requiera de multiples familias de objetos relacionados y se necesita asegurar su compatibilidad.
-  2. Cuando se requiera dejar la puerta abierta para futuras extensiones de objetos relacionados
-  3. Cuando se tienen varios *Factory Method* relacionados.
+💡 **Señal de sobreingeniería:**  
+Si tus "familias" solo tienen 1-2 productos, o si nunca creas objetos de la familia completa juntos, es excesivo.
 
 - **¿Cuales son sus componentes?**
 
@@ -330,12 +355,22 @@ El patrón de diseño *Builder* permite la creación de objetos complejos a trav
 
 - **¿Cuándo usar este patrón?**
 
-Este patrón de diseño suele utilizarce en los siguientes escenarios:
+✅ **Úsalo cuando:**
 
-  1. Cuando se necesite crear objetos complejos que tiene muchos parametros opcionales
-  2. Cuando la construccion de un objeto se necesita hacer de un determinado orden o ejecutar una serie de pasos.
-  3. Cuando se tiene metodos constructores con muchos parametros
-  4. Cuando se requiere de una interfaz común para construir diferentes objetos.
+- Tu constructor tiene **5+ parámetros**, muchos opcionales
+- La construcción del objeto requiere **múltiples pasos en un orden específico**
+- Necesitas crear diferentes representaciones del mismo objeto usando el mismo proceso
+- El objeto resultante es inmutable y quieres validar antes de crearlo
+- Quieres hacer el código de creación más legible (fluent interface)
+
+❌ **NO lo uses cuando:**
+
+- El objeto tiene 2-4 parámetros simples (usa un constructor normal)
+- No hay parámetros opcionales ni pasos complejos
+- Solo necesitas valores por defecto (usa parámetros opcionales)
+  
+💡 **Señal de sobreingeniería:**  
+Si tu builder solo tiene 3 métodos sencillos, o si siempre llamas los mismos métodos en el mismo orden, no lo necesitas.
 
 - **¿Cuales son sus componentes?**
 
@@ -462,10 +497,23 @@ Este patrón permite ocultar al cliente toda la complejidad de crear nuevas inst
 
 - **¿Cuándo usar este patrón?**
 
-Este patrón de diseño suele utilizarce en los siguientes escenarios:
-    - Cuando los tiempos o costos de creación de un objeto son altos.
-    - Cuando no se desea hacer el código dependiente de las clases que se van a copiar
-    - Cuando se requiere copiar un objeto muy complejo con configuraciones previas.
+✅ **Úsalo cuando:**
+
+- La creación del objeto es **costosa** (consultas DB, operaciones I/O, cálculos complejos)
+- Necesitas múltiples instancias con configuración similar pero independiente
+- Quieres crear objetos sin conocer su clase concreta (desacoplamiento)
+- El objeto tiene un estado complejo difícil de recrear desde cero
+- Trabajas con objetos inmutables que requieren varias transformaciones
+
+❌ **NO lo uses cuando:**
+
+- Los objetos son simples y baratos de crear (ej: DTOs, POCOs)
+- C# ya tiene solución nativa: `ICloneable`, records con `with`, o serialización
+- No hay diferencia de rendimiento medible entre clonar y crear
+- Solo copias para evitar referencias (usa copias manuales)
+  
+💡 **Señal de sobreingeniería:**  
+Si nunca mediste que crear el objeto es lento, o si el clone es tan complejo como el constructor, no lo necesitas.
 
 - **¿Cuales son sus componentes?**
 
@@ -513,11 +561,28 @@ El patrón de diseño *Singleton* se asegura de que una clase sea instanciada un
 
 - **¿Cuándo usar este patrón?**
 
-Este patrón de diseño se suele utilizar en los siguientes casos:
-    - Se requiere centralizar el control.
-    - Cuando se requiera que una instancia pueda ser accedida desde cualquier punto del código.
-    - Cuando se requiere una instancia global para todos los clientes.
-    - Cuando se necesite ser estricto con el control de variables gloabales.
+⚠️ **ADVERTENCIA:** Singleton es considerado un anti-patrón por muchos desarrolladores. Úsalo con extrema precaución.
+
+✅ **Úsalo SOLO cuando:**
+
+- Necesitas **exactamente una instancia** por razones físicas/técnicas (ej: driver de hardware)
+- El acceso concurrente a un recurso compartido debe ser sincronizado
+- Logging, configuración, o cache que genuinamente son globales
+- La vida útil del objeto es toda la aplicación
+
+❌ **NO lo uses cuando:**
+
+- Solo quieres compartir datos (usa inyección de dependencias con scope Singleton)
+- "Me parece conveniente tener acceso global" (es una señal de mal diseño)
+- Lo usas para evitar pasar parámetros
+- Dificulta las pruebas unitarias (casi siempre)
+- En aplicaciones web modernas (usa DI container)
+  
+💡 **Alternativa moderna:**  
+En aplicaciones .NET, usa **Dependency Injection** con `services.AddSingleton<T>()` en lugar de implementar el patrón manualmente.
+
+💡 **Señal de sobreingeniería:**  
+Si creaste un Singleton "por si acaso" o porque "solo necesito una instancia", probablemente estás complicando innecesariamente.
 
 - **¿Cuales son sus componentes?**
 

@@ -18,6 +18,6 @@ Los patrones de arquitectura son los más universales, son soluciones a alto niv
 
 - **Patrones Creacionales**: Estos patrones proveen mecanismos para la creacion de objetos de manera eficiente, desacoplando la creación de objetos de nuestro código. [ver más...](creationals/README.creationals.md)
 
-- **Patrones Estructurales**: Estos patrones nos enseñan como organizar y componer clases u objetos para formar sistemas complejos de manera sencilla. [ver más...](structural-patterns/README.Structurals.md)
+- **Patrones Estructurales**: Estos patrones nos enseñan como organizar y componer clases u objetos para formar sistemas complejos de manera sencilla. [ver más...](structurals/README.structurals.md)
 
-- **Patrones de Comportamiento**: Estos patrones se encargan de cómo se comunican, interactuan y se dividen responsabilidades los objetos.
+- **Patrones de Comportamiento**: Estos patrones se encargan de cómo se comunican, interactuan y se dividen responsabilidades los objetos. [ver más...](behaviour/README.behaviour.md)
