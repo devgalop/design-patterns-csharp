@@ -24,7 +24,7 @@ A continuación se desarrollan para cada uno de los patrones creacionales los si
 2. [Bridge](#bridge)
 3. [Composite](#composite)
 4. [Decorator](#decorator)
-5. [Fly weight](#fly-weight)
+5. [Flyweight](#flyweight)
 6. [Proxy](#proxy)
 
 ### Adapter
@@ -485,9 +485,18 @@ public class Client
 
 - **Definición**
 
+EL patrón **Facade** provee una interfaz simple y unificada hacia un subsistema complejo. El objetivo del patrón es esconder la complejidad interna haciendo que el sistema sea sencillo y fácil de mantener.
+
 - **¿Cuándo usar este patrón?**
 
+El patrón es utilizado en los siguientes escenarios:
+    1. Cuando se requiere exponer una interfaz simple ya que el subsistema es complejo.
+    2. Cuando se necesite minimizar la comunicación y dependencias entre subsistemas.
+
 - **¿Cuales son sus componentes?**
+
+  - **Facade**: Es la clase expuesta al cliente que se encarga de delegar las responsabilidades al subsistema.
+  - **Subsystem**: Son las clases que componen el subsistema complejo.
 
 - **Diagrama de clases**
 
@@ -495,30 +504,186 @@ public class Client
 
 - **Ejemplo**
 
+Para representar el patrón **Facade** podemos utilizar el siguiente ejemplo: Existe un sistema complejo que lee archivos de diferentes tipos, aplica reglas de transformacion de datos y guarda la información en una base de datos, para simplificar el uso del sistema por parte de los clientes, se expone una fachada con un solo método para procesar archivo.
+
 ```csharp
-//Implementacion
+
+public interface IRepository{
+    bool Save(string data);
+}
+
+public class CSVRepository : IRepository{
+    public bool Save(string data){
+        //Implementa lógica para guardar en base de datos o archivo
+        Console.WriteLine("Guardando datos en el repositorio...");
+        return true;
+    }
+}
+
+public interface IRuleManager{
+    string ApplyRule();
+}
+
+public class CSVRuleManager : IRuleManager{
+
+    private readonly string _data;
+
+    public CSVRuleManager(string data){
+        _data = data;
+    }
+
+    public string ApplyRule(){
+        //Implementa lógica para aplicar las reglas de transformación
+        Console.WriteLine("Aplicando reglas de transformación a los datos...");
+        return $"Datos transformados: {_data.ToUpper()}";
+    }
+}
+
+public interface IFileReader{
+    string Read(string filePath);
+}
+
+public class CSVReader : IFileReader{
+    public string Read(string filePath){
+        //Implementa lógica de lectura de archivos
+        Console.WriteLine($"Leyendo datos del archivo: {filePath}...");
+        return "Datos leídos del archivo CSV...";
+    }
+}
+
+// Facade: Clase simple expuesta a los clientes para procesar archivos
+public class FileProcessor {
+
+    private readonly string _filePath;
+
+    public FileProcessor(string filePath) {
+        _filePath = filePath;
+    }
+
+    // Método principal que coordina las operaciones del subsistema
+    public bool Process() {
+        Console.WriteLine("Iniciando el procesamiento del archivo...");
+
+        // Leer el archivo
+        IFileReader reader = new CSVReader();
+        string dataRead = reader.Read(_filePath);
+
+        // Aplica reglas de transformación de datos
+        IRuleManager ruleManager = new CSVRuleManager(dataRead);
+        string dataTransformed = ruleManager.ApplyRule();
+
+        // Guardar los datos transformados en el repositorio
+        IRepository repository = new CSVRepository();
+        bool isSaved = repository.Save(dataTransformed);
+
+        Console.WriteLine("Procesamiento del archivo completado.");
+        return isSaved;
+    }
+}
 ```
 
 [Volver a Indice](#tabla-de-contenido)
 
 ---
 
-### Fly Weight
+### Flyweight
 
 - **Definición**
 
+Este patrón de diseño es una forma de optimizar el uso de la memoria en aplicaciones que crean un gran número de objetos similares. Lo que propone el patrón es buscar el estado compartido de los objetos para reusarlo mientras sea posible.
+
+Los datos se dividen entre los datos comunes entre objetos (Intrinsic) y los datos unicos de los objetos (Extrinsic).
+
 - **¿Cuándo usar este patrón?**
+
+Para utilizar este patrón se tienen los siguientes escenarios:
+    1. Cuando se tiene una gran cantidad de objetos con datos similares.
+    2. Cuando se tienen datos compartidos entre los objetos
+    3. Cuando se identifica que el consumo de memoria es alto debido a los objetos creados.
 
 - **¿Cuales son sus componentes?**
 
+    -**Flyweight Factory**: Maneja el pool de objetos flyweight creados y provee los metodos para retornarlos.
+    -**Flyweight**: Define la interfaz con la cual el objeto flyweight recibe y actua con los datos unicos.
+    -**Concrete Flyweight**: Implementa la interfaz del flyweight y representa los objetos que pueden ser compartidos. Almacena el estado intrinseco.
+
 - **Diagrama de clases**
 
-![diagrama_fly_weight](resources/flyweigth_components.drawio.png)
+![diagrama_flyweight](resources/flyweight_components.drawio.png)
 
 - **Ejemplo**
 
 ```csharp
-//Implementacion
+//Interfaz Flyweight
+public interface IShape
+{
+    void Draw(string color); // Método que utiliza el estado extrínseco (color)
+}
+
+// Concrete Flyweight: Implementación concreta de la interfaz Flyweight
+public class Circle : IShape
+{
+    private readonly string _intrinsicState; // Estado intrínseco compartido
+
+    public Circle()
+    {
+        _intrinsicState = "Círculo"; // Estado intrínseco común a todos los círculos
+    }
+
+    public void Draw(string color)
+    {
+        // El color es el estado extrínseco, proporcionado en tiempo de ejecución
+        Console.WriteLine($"Dibujando un {_intrinsicState} de color {color}");
+    }
+}
+
+// Flyweight Factory: Administra los objetos Flyweight
+public class ShapeFactory
+{
+    private readonly Dictionary<string, IShape> _shapes = new();
+
+    public IShape GetShape(string shapeType)
+    {
+        // Verifica si el objeto ya existe en el pool
+        if (!_shapes.ContainsKey(shapeType))
+        {
+            // Si no existe, lo crea y lo agrega al pool
+            switch (shapeType)
+            {
+                case "Circle":
+                    _shapes[shapeType] = new Circle();
+                    break;
+                default:
+                    throw new ArgumentException("Tipo de forma no soportado");
+            }
+        }
+
+        // Retorna el objeto compartido
+        return _shapes[shapeType];
+    }
+}
+
+// Cliente: Utiliza el patrón Flyweight
+public class Client
+{
+    public void Run()
+    {
+        ShapeFactory shapeFactory = new ShapeFactory();
+
+        // Crear múltiples círculos con diferentes colores
+        IShape redCircle = shapeFactory.GetShape("Circle");
+        redCircle.Draw("Rojo"); // Usa el estado extrínseco "Rojo"
+
+        IShape blueCircle = shapeFactory.GetShape("Circle");
+        blueCircle.Draw("Azul"); // Usa el estado extrínseco "Azul"
+
+        IShape greenCircle = shapeFactory.GetShape("Circle");
+        greenCircle.Draw("Verde"); // Usa el estado extrínseco "Verde"
+
+        // Verificar que los objetos son compartidos
+        Console.WriteLine("¿Los círculos son el mismo objeto? " + (redCircle == blueCircle)); // True
+    }
+}
 ```
 
 [Volver a Indice](#tabla-de-contenido)
