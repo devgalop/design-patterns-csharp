@@ -345,9 +345,21 @@ public class Client
 
 - **Definición**
 
+El patrón **Decorator** permite que el comportamiento de los objetos sea agregado de manera individual y dinámica sin necesidad de modificar la clase original o afectar otros objetos. Este patrón funciona como una especie de envoltorio, donde cada funcionalidad o comportamiento nuevo es una capa que envuelve el objeto.
+
 - **¿Cuándo usar este patrón?**
 
+Este patrón se utiliza en los siguientes escenarios:
+    1. Cuando se necesite agregar comportamientos a objetos existentes.
+    2. Cuando se requiera añadir comportamientos en tiempo de ejecución.
+    3. Cuando añadir comportamientos trae una explosión de subclases.
+
 - **¿Cuales son sus componentes?**
+
+  - **Component**: Está es la *interfaz* que define el contrato tanto de los componentes como de los decoradores.
+  - **Concrete Component**: Es la implementación concreta de un componente.
+  - **Decorator**: Está es una clase abstracta que implementa la interfaz del componente y la cual mantiene una referencia con el objeto decorado.
+  - **Concrete Decorators**: Sobreescriben los comportamientos definidos por el decorador.
 
 - **Diagrama de clases**
 
@@ -355,8 +367,114 @@ public class Client
 
 - **Ejemplo**
 
+Para ejemplificar el patrón **Decorador** utilicemos a un personaje de un videojuego, el cual a medida que avanza en la historia puede ir incrementando sus habilidades. Cada objeto que use este personaje, tiene un efecto en sus habilidades. Por ejemplo: El escudo le da al personaje +5 puntos en proteccion, la espada le da +10 de ataque, etc.
+
+El patron decorator me permite tener un personaje base y con la ayuda de los decoradores ir implementando más comportamientos.
+
 ```csharp
-//Implementacion
+// Componente base
+public interface ICharacter
+{
+    string GetDescription();
+    int GetAttack();
+    int GetDefense();
+}
+
+// Componente concreto
+public class BaseCharacter : ICharacter
+{
+    public string GetDescription()
+    {
+        return "Personaje base";
+    }
+
+    public int GetAttack()
+    {
+        return 10; // Ataque base
+    }
+
+    public int GetDefense()
+    {
+        return 5; // Defensa base
+    }
+}
+
+// Decorador base
+public abstract class CharacterDecorator : ICharacter
+{
+    protected ICharacter _character;
+
+    public CharacterDecorator(ICharacter character)
+    {
+        _character = character;
+    }
+
+    public virtual string GetDescription()
+    {
+        return _character.GetDescription();
+    }
+
+    public virtual int GetAttack()
+    {
+        return _character.GetAttack();
+    }
+
+    public virtual int GetDefense()
+    {
+        return _character.GetDefense();
+    }
+}
+
+// Decorador concreto: Escudo
+public class ShieldDecorator : CharacterDecorator
+{
+    public ShieldDecorator(ICharacter character) : base(character) { }
+
+    public override string GetDescription()
+    {
+        return _character.GetDescription() + " con un escudo";
+    }
+
+    public override int GetDefense()
+    {
+        return _character.GetDefense() + 5; // Aumenta la defensa en 5
+    }
+}
+
+// Decorador concreto: Espada
+public class SwordDecorator : CharacterDecorator
+{
+    public SwordDecorator(ICharacter character) : base(character) { }
+
+    public override string GetDescription()
+    {
+        return _character.GetDescription() + " con una espada";
+    }
+
+    public override int GetAttack()
+    {
+        return _character.GetAttack() + 10; // Aumenta el ataque en 10
+    }
+}
+
+// Ejemplo de uso del patrón Decorator
+public class Client
+{
+    public void Run()
+    {
+        // Crear un personaje base
+        ICharacter character = new BaseCharacter();
+        Console.WriteLine($"{character.GetDescription()} - Ataque: {character.GetAttack()}, Defensa: {character.GetDefense()}");
+
+        // Decorar al personaje con un escudo
+        character = new ShieldDecorator(character);
+        Console.WriteLine($"{character.GetDescription()} - Ataque: {character.GetAttack()}, Defensa: {character.GetDefense()}");
+
+        // Decorar al personaje con una espada
+        character = new SwordDecorator(character);
+        Console.WriteLine($"{character.GetDescription()} - Ataque: {character.GetAttack()}, Defensa: {character.GetDefense()}");
+    }
+}
 ```
 
 [Volver a Indice](#tabla-de-contenido)
