@@ -234,13 +234,17 @@ public class Client
 
 - **Definición**
 
-El patrón de diseño *Composite* permite componer objetos dentro de estructuras de arboles y trabajar con cada objeto de manera individual.
+El patrón de diseño *Composite* permite organizar objetos dentro de estructura de árboles. El objetivo de este patrón es poder interactuar con un objeto simple (hoja) de la misma manera que con un objeto compuesto.
 
-**NOTA**: Este patron solo es aplicable a modelos que se puedan representar como un *árbol*
-
-El concepto principal es que se puede manipular una sola instancia del objeto de la misma manera que se puede manipular un grupo de instancias.
+**NOTA**: Este patron solo es aplicable a modelos que se puedan representar como un *árbol*.
 
 - **¿Cuándo usar este patrón?**
+
+El patrón composite se puede usar en los siguientes escenarios:
+
+ 1. Cuando se necesite representar estructuras jerárquicas de objetos, donde unos objetos pueden contener otros similares.
+ 2. Cuando se requiera dar un tratamiento uniforme a los objetos.
+ 3. Cuando se requieran operaciones recursivas sobre una estructura de datos.
 
 - **¿Cuales son sus componentes?**
 
@@ -254,8 +258,83 @@ El concepto principal es que se puede manipular una sola instancia del objeto de
 
 - **Ejemplo**
 
+Para representar el patrón **Composite** usaremos el siguiente ejemplo: Una aplicación utiliza un archivo json que contiene un esquema de cómo debe leer los diferentes insumos que envían sus clientes. Este esquema tiene una estructura definida por Componentes y campos del componente. Un componente puede tener dentro de si uno o más campos de componentes, adicionalmente, también es posible que contenga otros componentes.
+
+El patrón nos permite jerarquizar esta estructura del json fácilmente.
+
 ```csharp
-//Implementacion
+// Interfaz Component
+public interface IComponent
+{
+    string GetValue();
+}
+
+// Leaf: Elemento más simple de la jerarquía
+public class FieldComponent : IComponent
+{
+    private readonly string _value;
+
+    public FieldComponent(string value)
+    {
+        _value = value;
+    }
+
+    public string GetValue()
+    {
+        return _value; // Devuelve el valor del campo
+    }
+}
+
+// Composite: Puede contener otros componentes (hijos)
+public class Component : IComponent
+{
+    private readonly List<IComponent> _components;
+
+    public Component()
+    {
+        _components = new List<IComponent>();
+    }
+
+    public void AddComponent(IComponent component)
+    {
+        _components.Add(component); // Agrega un componente hijo
+    }
+
+    public string GetValue()
+    {
+        // Combina los valores de todos los componentes hijos
+        string result = "Componente compuesto: ";
+        foreach (IComponent comp in _components)
+        {
+            result += comp.GetValue() + " ";
+        }
+        return result.Trim();
+    }
+}
+
+// Ejemplo de uso del patrón Composite
+public class Client
+{
+    public void DisplayComponentValues()
+    {
+        // Crear componentes simples (Leaf)
+        IComponent field1 = new FieldComponent("Campo 1");
+        IComponent field2 = new FieldComponent("Campo 2");
+
+        // Crear un componente compuesto (Composite)
+        Component composite = new Component();
+        composite.AddComponent(field1);
+        composite.AddComponent(field2);
+
+        // Crear un componente compuesto más grande
+        Component root = new Component();
+        root.AddComponent(composite);
+        root.AddComponent(new FieldComponent("Campo 3"));
+
+        // Mostrar los valores de los componentes
+        Console.WriteLine(root.GetValue());
+    }
+}
 ```
 
 [Volver a Indice](#tabla-de-contenido)
