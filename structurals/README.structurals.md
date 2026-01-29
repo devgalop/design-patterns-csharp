@@ -35,12 +35,20 @@ El patrón de diseño *adapter* funge como un puente para la colaboración entre
 
 - **¿Cuándo usar este patrón?**
 
-Este patrón se suele utilizar en los siguientes escenarios:
+✅ **Úsalo cuando:**
 
-1. Cuando se requiere utilizar código existente pero las interfaces no son compatibles con el resto del código.
-2. Cuando se necesite utilizar subclases que no pueden ser agregadas en una superclase.
-3. Cuando necesitas implementar librerias existentes que son incompatibles con tu codigo.
-4. Cuando el proyecto crece, el patrón permite agregar este nuevo codigo sin afectar el existente.
+- Necesitas integrar una API o sistema externo con tu aplicación.
+- Quieres reutilizar código existente que no es compatible con tu sistema actual.
+- Necesitas adaptar una clase heredada para que funcione con una nueva interfaz.
+
+❌ **NO lo uses cuando:**
+
+- Las interfaces ya son compatibles entre sí.
+- La adaptación puede resolverse con una simple modificación en el código existente.
+
+💡 **Señal de sobreingeniería:**
+
+- Crear adaptadores para interfaces que ya son compatibles o para casos donde no es necesario.
 
 - **¿Cuales son sus componentes?**
 
@@ -94,17 +102,21 @@ public interface IPaymentX{
 
 El patrón de diseño *Bridge* permite dividir una jerarquia de clases muy extensa y que se desarrollan por separado, en dos jerarquias *Abstractions* e *Implementations*. Esto habilita que ambas jerarquias puedan desarrollarse de manera independiente.
 
-El sitio web [Refactoring Guru](https://refactoring.guru/design-patterns/bridge) resume esto con un ejemplo básico y fácil de entender. Supongamos que tenemos una clase *Figura* la cual tiene implementaciones como *Circulo* y *Cuadrado*. Se desea incorporar a esta clase *Figura* diferentes colores como lo son *Rojo* y *Azul*. Si se implementa estos colores en la jerarquia de figura se duplicarían las clases concretas:
-*Circulo Rojo*, *Circulo Azul*, *Cuadrado Rojo*, *Cuadrado Azul*. A medida que la jerarquia crece, se hace más tedioso realizar nuevas implementaciones.
-
-Para resolver este problema, se dividen dos claras jerarquias *Figuras* y *Colores*. Donde la *Figura* contiene un *Color*.
-
 - **¿Cuándo usar este patrón?**
 
-El patrón brige se debe usar en los siguientes escenarios:
+✅ **Úsalo cuando:**
 
-  1. Cuando una jerarquía crece de manera exponencial debido a la combinación de multiples variables de dimensión.
-  2. Cuando se desee separar la lógica de los detalles de la implementación de la jerarquía, de modo de que evolucionen independiente.
+- Una jerarquía de clases crece exponencialmente debido a múltiples combinaciones de características.
+- Quieres separar la lógica de alto nivel de los detalles de implementación.
+
+❌ **NO lo uses cuando:**
+
+- La jerarquía es simple y no se espera que crezca significativamente.
+- No hay necesidad de separar la lógica de implementación.
+
+💡 **Señal de sobreingeniería:**
+
+- Dividir jerarquías simples en múltiples abstracciones sin una necesidad clara.
 
 - **¿Cuales son sus componentes?**
 
@@ -236,20 +248,29 @@ public class Client
 
 El patrón de diseño *Composite* permite organizar objetos dentro de estructura de árboles. El objetivo de este patrón es poder interactuar con un objeto simple (hoja) de la misma manera que con un objeto compuesto.
 
-**NOTA**: Este patron solo es aplicable a modelos que se puedan representar como un *árbol*.
+**NOTA**: Este patrón solo es aplicable a modelos que se puedan representar como un *árbol*.
 
 - **¿Cuándo usar este patrón?**
 
-El patrón composite se puede usar en los siguientes escenarios:
+✅ **Úsalo cuando:**
 
- 1. Cuando se necesite representar estructuras jerárquicas de objetos, donde unos objetos pueden contener otros similares.
- 2. Cuando se requiera dar un tratamiento uniforme a los objetos.
- 3. Cuando se requieran operaciones recursivas sobre una estructura de datos.
+- Necesites representar estructuras jerárquicas de objetos, como un sistema de archivos.
+- Quieras tratar objetos simples y compuestos de la misma manera.
+- Requieras realizar operaciones recursivas sobre una estructura de datos.
+
+❌ **NO lo uses cuando:**
+
+- No hay una estructura jerárquica clara en los datos.
+- No necesitas tratar objetos simples y compuestos de forma uniforme.
+
+💡 **Señal de sobreingeniería:**
+
+- Usar composite para estructuras planas o sin jerarquías claras.
 
 - **¿Cuales son sus componentes?**
 
-  - **Component**: El componente declara la *interface* para los objetos en la composicion. También permite acceder y administrar los componentes hijos.
-  - **Leaf**: Define el comportamiento para los objetos primitivos dentro de la composicion. Este es la implementacion base de la composicion. Representa la implementación de la *interface* *Component*.
+  - **Component**: El componente declara la *interface* para los objetos en la composición. También permite acceder y administrar los componentes hijos.
+  - **Leaf**: Define el comportamiento para los objetos primitivos dentro de la composición. Este es la implementación base de la composición. Representa la implementación de la *interface* *Component*.
   - **Composite**: Almacena los componentes hijos e implementa las operaciones entre los hijos. Los hijos pueden ser *Leaf* u otros *Composite*.
 
 - **Diagrama de clases**
@@ -258,7 +279,7 @@ El patrón composite se puede usar en los siguientes escenarios:
 
 - **Ejemplo**
 
-Para representar el patrón **Composite** usaremos el siguiente ejemplo: Una aplicación utiliza un archivo json que contiene un esquema de cómo debe leer los diferentes insumos que envían sus clientes. Este esquema tiene una estructura definida por Componentes y campos del componente. Un componente puede tener dentro de si uno o más campos de componentes, adicionalmente, también es posible que contenga otros componentes.
+Para representar el patrón **Composite** usaremos el siguiente ejemplo: Una aplicación utiliza un archivo json que contiene un esquema de cómo debe leer los diferentes insumos que envían sus clientes. Este esquema tiene una estructura definida por Componentes y campos del componente. Un componente puede tener dentro de sí uno o más campos de componentes, adicionalmente, también es posible que contenga otros componentes.
 
 El patrón nos permite jerarquizar esta estructura del json fácilmente.
 
@@ -349,10 +370,20 @@ El patrón **Decorator** permite que el comportamiento de los objetos sea agrega
 
 - **¿Cuándo usar este patrón?**
 
-Este patrón se utiliza en los siguientes escenarios:
-    1. Cuando se necesite agregar comportamientos a objetos existentes.
-    2. Cuando se requiera añadir comportamientos en tiempo de ejecución.
-    3. Cuando añadir comportamientos trae una explosión de subclases.
+✅ **Úsalo cuando:**
+
+- Necesites agregar comportamientos a objetos existentes sin modificar su código.
+- Quieras añadir comportamientos en tiempo de ejecución.
+- Deseas evitar una explosión de subclases para cada combinación de comportamientos.
+
+❌ **NO lo uses cuando:**
+
+- Los comportamientos adicionales pueden implementarse directamente en la clase base sin afectar su diseño.
+- No necesitas agregar comportamientos dinámicamente.
+
+💡 **Señal de sobreingeniería:**
+
+- Crear demasiados decoradores para funcionalidades que podrían implementarse de manera más simple.
 
 - **¿Cuales son sus componentes?**
 
@@ -369,7 +400,7 @@ Este patrón se utiliza en los siguientes escenarios:
 
 Para ejemplificar el patrón **Decorador** utilicemos a un personaje de un videojuego, el cual a medida que avanza en la historia puede ir incrementando sus habilidades. Cada objeto que use este personaje, tiene un efecto en sus habilidades. Por ejemplo: El escudo le da al personaje +5 puntos en proteccion, la espada le da +10 de ataque, etc.
 
-El patron decorator me permite tener un personaje base y con la ayuda de los decoradores ir implementando más comportamientos.
+El patrón decorator me permite tener un personaje base y con la ayuda de los decoradores ir implementando más comportamientos.
 
 ```csharp
 // Componente base
@@ -489,9 +520,20 @@ EL patrón **Facade** provee una interfaz simple y unificada hacia un subsistema
 
 - **¿Cuándo usar este patrón?**
 
-El patrón es utilizado en los siguientes escenarios:
-    1. Cuando se requiere exponer una interfaz simple ya que el subsistema es complejo.
-    2. Cuando se necesite minimizar la comunicación y dependencias entre subsistemas.
+✅ **Úsalo cuando:**
+
+- Necesites exponer una interfaz simple para un subsistema complejo.
+- Quieras reducir las dependencias entre múltiples subsistemas.
+- Desees facilitar el uso de un sistema para clientes externos.
+
+❌ **NO lo uses cuando:**
+
+- El sistema ya es simple y no requiere una capa adicional de abstracción.
+- No hay un subsistema complejo que necesite simplificación.
+
+💡 **Señal de sobreingeniería:**
+
+- Crear una fachada para un sistema que no tiene complejidad suficiente para justificarla.
 
 - **¿Cuales son sus componentes?**
 
@@ -504,10 +546,9 @@ El patrón es utilizado en los siguientes escenarios:
 
 - **Ejemplo**
 
-Para representar el patrón **Facade** podemos utilizar el siguiente ejemplo: Existe un sistema complejo que lee archivos de diferentes tipos, aplica reglas de transformacion de datos y guarda la información en una base de datos, para simplificar el uso del sistema por parte de los clientes, se expone una fachada con un solo método para procesar archivo.
+Para representar el patrón **Facade** podemos utilizar el siguiente ejemplo: Existe un sistema complejo que lee archivos de diferentes tipos, aplica reglas de transformación de datos y guarda la información en una base de datos. Para simplificar el uso del sistema por parte de los clientes, se expone una fachada con un solo método para procesar archivo.
 
 ```csharp
-
 public interface IRepository{
     bool Save(string data);
 }
@@ -592,20 +633,30 @@ public class FileProcessor {
 
 Este patrón de diseño es una forma de optimizar el uso de la memoria en aplicaciones que crean un gran número de objetos similares. Lo que propone el patrón es buscar el estado compartido de los objetos para reusarlo mientras sea posible.
 
-Los datos se dividen entre los datos comunes entre objetos (Intrinsic) y los datos unicos de los objetos (Extrinsic).
+Los datos se dividen entre los datos comunes entre objetos (Intrinsic) y los datos únicos de los objetos (Extrinsic).
 
 - **¿Cuándo usar este patrón?**
 
-Para utilizar este patrón se tienen los siguientes escenarios:
-    1. Cuando se tiene una gran cantidad de objetos con datos similares.
-    2. Cuando se tienen datos compartidos entre los objetos
-    3. Cuando se identifica que el consumo de memoria es alto debido a los objetos creados.
+✅ **Úsalo cuando:**
+
+- Tienes una gran cantidad de objetos con datos similares.
+- Necesitas reducir el consumo de memoria compartiendo datos comunes entre objetos.
+- Identificas que el consumo de memoria es alto debido a la creación de muchos objetos.
+
+❌ **NO lo uses cuando:**
+
+- El número de objetos es pequeño y el consumo de memoria no es un problema.
+- Los objetos tienen pocos datos en común y muchos datos únicos.
+
+💡 **Señal de sobreingeniería:**
+
+- Implementar flyweight para optimizar un sistema que no tiene problemas de memoria.
 
 - **¿Cuales son sus componentes?**
 
-    -**Flyweight Factory**: Maneja el pool de objetos flyweight creados y provee los metodos para retornarlos.
-    -**Flyweight**: Define la interfaz con la cual el objeto flyweight recibe y actua con los datos unicos.
-    -**Concrete Flyweight**: Implementa la interfaz del flyweight y representa los objetos que pueden ser compartidos. Almacena el estado intrinseco.
+  - **Flyweight Factory**: Maneja el pool de objetos flyweight creados y provee los métodos para retornarlos.
+  - **Flyweight**: Define la interfaz con la cual el objeto flyweight recibe y actúa con los datos únicos.
+  - **Concrete Flyweight**: Implementa la interfaz del flyweight y representa los objetos que pueden ser compartidos. Almacena el estado intrínseco.
 
 - **Diagrama de clases**
 
@@ -614,7 +665,7 @@ Para utilizar este patrón se tienen los siguientes escenarios:
 - **Ejemplo**
 
 ```csharp
-//Interfaz Flyweight
+// Interfaz Flyweight
 public interface IShape
 {
     void Draw(string color); // Método que utiliza el estado extrínseco (color)
@@ -694,9 +745,30 @@ public class Client
 
 - **Definición**
 
+Este patrón de diseño estructural, permite a un objeto actuar como el intermediario para controlar el acceso al objeto real. De esta manera, se pueden ejecutar procesos intermedios (antes o despues) de que la petición llegue al objeto real.
+
 - **¿Cuándo usar este patrón?**
 
+✅ **Úsalo cuando:**
+
+- Necesites controlar el acceso a un objeto costoso o sensible.
+- Quieras implementar funcionalidades adicionales como *caching*, *logging* o *control de acceso*.
+- Desees diferir la creación de un objeto hasta que sea realmente necesario (*Lazy Initialization*).
+
+❌ **NO lo uses cuando:**
+
+- No hay necesidad de controlar el acceso al objeto real.
+- El objeto real es simple y no requiere lógica adicional.
+
+💡 **Señal de sobreingeniería:**
+
+- Crear proxies para objetos que no necesitan control de acceso o funcionalidades adicionales.
+
 - **¿Cuales son sus componentes?**
+
+  - **Subject**: Es la interfaz o clase abstracta que define el contrato común entre el objeto real y el proxy.
+  - **Proxy**: Implementa la interfaz Subject para controlar el acceso al objeto real.
+  - **Real Subject**: Contiene la implementación real con las reglas de negocio.
 
 - **Diagrama de clases**
 
@@ -704,8 +776,63 @@ public class Client
 
 - **Ejemplo**
 
+Para ejemplificar este patrón, usaremos la funcionalidad de caching. Supongamos que nuestra aplicacion dentro de sus funciones, tiene la posibilidad de consultar una tabla maestra que suele tardarse mucho en cargar. Los datos de esta tabla no cambian en el tiempo por lo que implementamos Proxy para cargar una sola vez el contenido, las demás veces se reutiliza lo que se tiene en memoria.
+
 ```csharp
-//Implementacion
+//Interfaz Subject
+public interface IMasterTable
+{
+    List<string> GetData();
+}
+
+// Real Subject: Implementación real que realiza la consulta a la tabla maestra
+public class RealMasterTable : IMasterTable
+{
+    public List<string> GetData()
+    {
+        Console.WriteLine("Consultando la tabla maestra...");
+        // Simula una consulta costosa a la base de datos
+        Thread.Sleep(2000); // Simula un retraso
+        return new List<string> { "Dato1", "Dato2", "Dato3" };
+    }
+}
+
+// Proxy: Controla el acceso al Real Subject y agrega funcionalidad de caching
+public class MasterTableProxy : IMasterTable
+{
+    private RealMasterTable _realMasterTable;
+    private List<string> _cachedData;
+
+    public List<string> GetData()
+    {
+        if (_cachedData == null)
+        {
+            Console.WriteLine("Cargando datos en caché por primera vez...");
+            _realMasterTable = new RealMasterTable();
+            _cachedData = _realMasterTable.GetData();
+            return _cachedData;
+        }
+        Console.WriteLine("Usando datos en caché...");
+        return _cachedData;
+    }
+}
+
+// Cliente: Utiliza el Proxy para acceder a la tabla maestra
+public class Client
+{
+    public void Run()
+    {
+        IMasterTable masterTable = new MasterTableProxy();
+
+        // Primera consulta: carga los datos desde la tabla maestra
+        var data1 = masterTable.GetData();
+        Console.WriteLine(string.Join(", ", data1));
+
+        // Segunda consulta: utiliza los datos en caché
+        var data2 = masterTable.GetData();
+        Console.WriteLine(string.Join(", ", data2));
+    }
+}
 ```
 
 [Volver a Indice](#tabla-de-contenido)
