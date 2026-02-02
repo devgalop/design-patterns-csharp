@@ -20,8 +20,8 @@ A continuación se desarrollan para cada uno de los patrones creacionales los si
 
 ## Tabla de contenido
 
-1. [Chain of Responsibility (CoR)](#tabla-de-contenido)
-2. [Command](#tabla-de-contenido)
+1. [Chain of Responsibility (CoR)](#chain-of-responsibility-cor)
+2. [Command](#command)
 3. [Iterator](#tabla-de-contenido)
 4. [Mediator](#tabla-de-contenido)
 5. [Memento](#tabla-de-contenido)
@@ -192,3 +192,49 @@ public sealed class SupportCriticalHandler : ISupportTaskHandler{
 [Volver a Indice](#tabla-de-contenido)
 
 ---
+
+### Command
+
+- **Definición**
+
+El patrón **Command** permite encapsular peticiones dentro de un objeto, desacoplando el Sender del Receiver. Este patrón permite que las peticiones sean pasadas como argumentos, encoladas, logueadas dentro de un historial de comandos o incluso tener operaciones reversibles. 
+
+- **¿Cuándo usar este patrón?**
+
+✅ **Úsalo cuando:**
+
+- Quieres encapsular una solicitud como un objeto, permitiendo parametrizar clientes con diferentes solicitudes.
+- Necesitas realizar operaciones que puedan ser deshechas (deshacer/rehacer).
+- Deseas mantener un historial de operaciones realizadas para poder auditarlas o repetirlas.
+- Quieres desacoplar el objeto que invoca una operación del objeto que la ejecuta.
+
+❌ **NO lo uses cuando:**
+
+- La lógica de las operaciones es simple y no requiere ser encapsulada en objetos separados.
+- No necesitas mantener un historial de operaciones ni realizar operaciones reversibles.
+- El sistema no requiere flexibilidad para cambiar dinámicamente las solicitudes o comandos.
+
+💡 **Señal de sobreingeniería:**
+
+- Tienes demasiados comandos que son muy simples y no justifican el uso del patrón.
+- La implementación del patrón introduce una complejidad innecesaria en un sistema que podría resolverse con métodos directos.
+- Los comandos no son reutilizados ni se benefician de la flexibilidad que ofrece el patrón.
+
+- **¿Cuales son sus componentes?**
+
+  - **ICommand**: Interfaz común entre los comandos.
+  - **Concrete Commands**: Implementación concreta de cada uno de los comandos.
+  - **Invoker**: Se encarga de iniciar la ejecución de los comandos sin conocer los detalles.
+  - **Receiver**: Ejecuta la operación definida por el comando.
+
+- **Diagrama de clases**
+
+![diagrama_command](resources/command_components.drawio.png)
+
+- **Ejemplo**
+
+```csharp
+
+```
+
+[Volver a Indice](#tabla-de-contenido)
