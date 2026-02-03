@@ -197,7 +197,7 @@ public sealed class SupportCriticalHandler : ISupportTaskHandler{
 
 - **Definición**
 
-El patrón **Command** permite encapsular peticiones dentro de un objeto, desacoplando el Sender del Receiver. Este patrón permite que las peticiones sean pasadas como argumentos, encoladas, logueadas dentro de un historial de comandos o incluso tener operaciones reversibles. 
+El patrón **Command** permite encapsular peticiones dentro de un objeto, desacoplando el Sender del Receiver. Este patrón permite que las peticiones sean pasadas como argumentos, encoladas, logueadas dentro de un historial de comandos o incluso tener operaciones reversibles.
 
 - **¿Cuándo usar este patrón?**
 
@@ -233,8 +233,122 @@ El patrón **Command** permite encapsular peticiones dentro de un objeto, desaco
 
 - **Ejemplo**
 
-```csharp
+Para dar un ejemplo sobre el patrón **Command** simularemos el siguiente escenario: Un sistema encargado de la logistica de una empresa, tiene dentro de sus operaciones despachar pedidos, generar pedidos, cancelar pedido. El patrón **Command** me permite separar cada uno de estos en comandos separados que voy a loguear en un historial y posteriormente a encolar a un broker de mensajes.
 
+```csharp
+public interface ICommand
+{
+    void Execute();
+}
+
+// Receiver
+public class LogisticsSystem
+{
+    public void DispatchOrder()
+    {
+        Console.WriteLine("Order dispatched.");
+    }
+
+    public void GenerateOrder()
+    {
+        Console.WriteLine("Order generated.");
+    }
+
+    public void CancelOrder()
+    {
+        Console.WriteLine("Order canceled.");
+    }
+}
+
+// Concrete Commands
+public class DispatchOrderCommand : ICommand
+{
+    private readonly LogisticsSystem _logisticsSystem;
+
+    public DispatchOrderCommand(LogisticsSystem logisticsSystem)
+    {
+        _logisticsSystem = logisticsSystem;
+    }
+
+    public void Execute()
+    {
+        _logisticsSystem.DispatchOrder();
+    }
+}
+
+public class GenerateOrderCommand : ICommand
+{
+    private readonly LogisticsSystem _logisticsSystem;
+
+    public GenerateOrderCommand(LogisticsSystem logisticsSystem)
+    {
+        _logisticsSystem = logisticsSystem;
+    }
+
+    public void Execute()
+    {
+        _logisticsSystem.GenerateOrder();
+    }
+}
+
+public class CancelOrderCommand : ICommand
+{
+    private readonly LogisticsSystem _logisticsSystem;
+
+    public CancelOrderCommand(LogisticsSystem logisticsSystem)
+    {
+        _logisticsSystem = logisticsSystem;
+    }
+
+    public void Execute()
+    {
+        _logisticsSystem.CancelOrder();
+    }
+}
+
+// Invoker
+public class CommandInvoker
+{
+    private readonly List<ICommand> _commandHistory = new();
+
+    public void ExecuteCommand(ICommand command)
+    {
+        command.Execute();
+        _commandHistory.Add(command);
+    }
+
+    public void ShowHistory()
+    {
+        Console.WriteLine("Command History:");
+        foreach (var command in _commandHistory)
+        {
+            Console.WriteLine(command.GetType().Name);
+        }
+    }
+}
+
+// Example usage
+class Program
+{
+    static void Main(string[] args)
+    {
+        var logisticsSystem = new LogisticsSystem();
+
+        var dispatchCommand = new DispatchOrderCommand(logisticsSystem);
+        var generateCommand = new GenerateOrderCommand(logisticsSystem);
+        var cancelCommand = new CancelOrderCommand(logisticsSystem);
+
+        var invoker = new CommandInvoker();
+
+        invoker.ExecuteCommand(dispatchCommand);
+        invoker.ExecuteCommand(generateCommand);
+        invoker.ExecuteCommand(cancelCommand);
+
+        invoker.ShowHistory();
+    }
+}
 ```
 
 [Volver a Indice](#tabla-de-contenido)
+
+---
