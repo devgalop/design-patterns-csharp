@@ -22,7 +22,7 @@ A continuación se desarrollan para cada uno de los patrones creacionales los si
 
 1. [Chain of Responsibility (CoR)](#chain-of-responsibility-cor)
 2. [Command](#command)
-3. [Iterator](#tabla-de-contenido)
+3. [Iterator](#iterator)
 4. [Mediator](#tabla-de-contenido)
 5. [Memento](#tabla-de-contenido)
 6. [Observer](#tabla-de-contenido)
@@ -381,8 +381,8 @@ El patrón **Iterator** proporciona una forma uniforme de recorrer los elementos
 
 - **¿Cuales son sus componentes?**
 
-  - **Iterator Collection**: Define la interfaz para crear iteradores de un objeto.
-  - **Concrete Iterator Collection**: Implementación concreta de cada uno de los iteradores.
+  - **Iterable Collection**: Define la interfaz para crear iteradores de un objeto.
+  - **Concrete Iterable Collection**: Implementación concreta de cada uno de los iteradores.
   - **Iterator**: Define la interfaz para acceder y recorrer los elementos de la colección.
   - **Concrete Iterator**: Implementación concreta para mantener la posicion actual y define las operaciones posibles del iterador.
 
@@ -392,8 +392,132 @@ El patrón **Iterator** proporciona una forma uniforme de recorrer los elementos
 
 - **Ejemplo**
 
-```csharp
+Para ejemplificar el patrón **Iterator** imaginemos que dentro del sistema tenemos una coleccion de productos, los cuales tienen diferentes formas de recorrerse dependiendo de la funcionalidad seleccionada. Listar productos nuevos permite recorrer los productos en orden descendente a su fecha de creacion. Listar productos con poco stock permite recorrer los productos que tienen menor stock y puede que en el futuro se implementen más tipos de llamados.
 
+```csharp
+// Producto
+public class Producto
+{
+    public string Nombre { get; set; }
+    public DateTime FechaCreacion { get; set; }
+    public int Stock { get; set; }
+
+    public Producto(string nombre, DateTime fechaCreacion, int stock)
+    {
+        Nombre = nombre;
+        FechaCreacion = fechaCreacion;
+        Stock = stock;
+    }
+}
+
+// Interfaz Iterator
+public interface IIterator<T>
+{
+    bool HasNext();
+    T Next();
+}
+
+// Interfaz Iterable Collection
+public interface IProductoCollection
+{
+    IIterator<Producto> CreateFechaCreacionIterator();
+    IIterator<Producto> CreateStockIterator();
+}
+
+// Implementación concreta de la colección
+public class ProductoCollection : IProductoCollection
+{
+    private List<Producto> _productos = new();
+
+    public void AddProducto(Producto producto)
+    {
+        _productos.Add(producto);
+    }
+
+    public IIterator<Producto> CreateFechaCreacionIterator()
+    {
+        return new FechaCreacionIterator(_productos);
+    }
+
+    public IIterator<Producto> CreateStockIterator()
+    {
+        return new StockIterator(_productos);
+    }
+}
+
+// Implementación concreta del iterador por fecha de creación
+public class FechaCreacionIterator : IIterator<Producto>
+{
+    private readonly List<Producto> _productos;
+    private int _position;
+
+    public FechaCreacionIterator(List<Producto> productos)
+    {
+        _productos = productos.OrderByDescending(p => p.FechaCreacion).ToList();
+        _position = 0;
+    }
+
+    public bool HasNext()
+    {
+        return _position < _productos.Count;
+    }
+
+    public Producto Next()
+    {
+        return _productos[_position++];
+    }
+}
+
+// Implementación concreta del iterador por stock
+public class StockIterator : IIterator<Producto>
+{
+    private readonly List<Producto> _productos;
+    private int _position;
+
+    public StockIterator(List<Producto> productos)
+    {
+        _productos = productos.OrderBy(p => p.Stock).ToList();
+        _position = 0;
+    }
+
+    public bool HasNext()
+    {
+        return _position < _productos.Count;
+    }
+
+    public Producto Next()
+    {
+        return _productos[_position++];
+    }
+}
+
+// Ejemplo de uso
+class Program
+{
+    static void Main(string[] args)
+    {
+        var productos = new ProductoCollection();
+        productos.AddProducto(new Producto("Producto A", new DateTime(2026, 1, 1), 50));
+        productos.AddProducto(new Producto("Producto B", new DateTime(2026, 2, 1), 20));
+        productos.AddProducto(new Producto("Producto C", new DateTime(2025, 12, 1), 100));
+
+        Console.WriteLine("Recorrido por fecha de creación (descendente):");
+        var fechaIterator = productos.CreateFechaCreacionIterator();
+        while (fechaIterator.HasNext())
+        {
+            var producto = fechaIterator.Next();
+            Console.WriteLine($"{producto.Nombre} - {producto.FechaCreacion}");
+        }
+
+        Console.WriteLine("\nRecorrido por stock (ascendente):");
+        var stockIterator = productos.CreateStockIterator();
+        while (stockIterator.HasNext())
+        {
+            var producto = stockIterator.Next();
+            Console.WriteLine($"{producto.Nombre} - Stock: {producto.Stock}");
+        }
+    }
+}
 ```
 
 [Volver a Indice](#tabla-de-contenido)
