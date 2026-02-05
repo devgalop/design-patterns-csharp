@@ -521,3 +521,52 @@ class Program
 ```
 
 [Volver a Indice](#tabla-de-contenido)
+
+---
+
+## Mediator
+
+- **Definición**
+
+El patrón **Mediator** nos permite simplificar la comunicación entre los objetos quitando el caos de dependencias y reemplazándolo por un objeto mediador. Todos los objetos se deben comunicar a través del mediador.
+
+- **¿Cuándo usar este patrón?**
+
+✅ **Úsalo cuando:**
+
+- Tienes múltiples objetos que necesitan comunicarse entre sí, pero deseas evitar dependencias directas entre ellos.
+- Quieres centralizar la lógica de comunicación o control entre varios objetos en un único lugar.
+- Deseas facilitar el mantenimiento y la escalabilidad del sistema al reducir el acoplamiento entre los objetos.
+
+❌ **NO lo uses cuando:**
+
+- Los objetos pueden comunicarse directamente sin generar un acoplamiento excesivo.
+- El mediador se convierte en un punto único de fallo o se vuelve demasiado complejo debido a la cantidad de lógica que maneja.
+- El sistema es simple y no requiere una estructura centralizada para la comunicación.
+
+💡 **Señal de sobreingeniería:**
+
+- El mediador se convierte en una clase monolítica que gestiona demasiada lógica, dificultando su mantenimiento.
+- Los objetos dependen excesivamente del mediador, perdiendo su independencia y flexibilidad.
+- Se utiliza el patrón en un sistema donde las dependencias directas entre objetos son mínimas y no generan problemas.
+
+- **¿Cuales son sus componentes?**
+
+  - **Mediator**: Define el contrato de comunicación.
+  - **Concrete Mediator**: Implementación concreta del mediador, facilitando la comunicacion entre objetos Colleague.
+  - **Colleague**: Interfaz que define las clases que se van a comunicar.
+  - **Concrete Colleague**: Implementación concreta de la clase que se va a comunicar. Este objeto delega la comunicación al mediador.
+
+- **Diagrama de clases**
+
+![diagrama_command](resources/mediator_components.drawio.png)
+
+- **Ejemplo**
+
+```csharp
+
+```
+
+[Volver a Indice](#tabla-de-contenido)
+
+---
