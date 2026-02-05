@@ -352,3 +352,48 @@ class Program
 [Volver a Indice](#tabla-de-contenido)
 
 ---
+
+### Iterator
+
+- **Definición**
+
+El patrón **Iterator** proporciona una forma uniforme de recorrer los elementos de una colección (como listas, pilas, colas o árboles) sin exponer su implementación interna. Este patrón utiliza un objeto iterador separado que encapsula la lógica de recorrido, permitiendo que la estructura interna de la colección pueda cambiar sin afectar la forma en que se accede a sus elementos.
+
+- **¿Cuándo usar este patrón?**
+
+✅ **Úsalo cuando:**
+
+- Necesitas recorrer una colección de elementos sin exponer su estructura interna.
+- Quieres proporcionar múltiples formas de recorrer una colección (por ejemplo, hacia adelante, hacia atrás, por niveles, etc.).
+- Deseas unificar la forma de iterar sobre diferentes tipos de colecciones.
+
+❌ **NO lo uses cuando:**
+
+- La colección es simple y no requiere un objeto iterador separado para recorrerla.
+- No necesitas diferentes formas de recorrer la colección.
+- La colección es inmutable y no se espera que cambie su estructura interna.
+
+💡 **Señal de sobreingeniería:**
+
+- Creas iteradores para colecciones que no necesitan un recorrido complejo o personalizado.
+- La implementación del iterador es más compleja que la propia colección.
+- Existen múltiples iteradores que no aportan un valor significativo al diseño del sistema.
+
+- **¿Cuales son sus componentes?**
+
+  - **Iterator Collection**: Define la interfaz para crear iteradores de un objeto.
+  - **Concrete Iterator Collection**: Implementación concreta de cada uno de los iteradores.
+  - **Iterator**: Define la interfaz para acceder y recorrer los elementos de la colección.
+  - **Concrete Iterator**: Implementación concreta para mantener la posicion actual y define las operaciones posibles del iterador.
+
+- **Diagrama de clases**
+
+![diagrama_command](resources/iterator_components.drawio.png)
+
+- **Ejemplo**
+
+```csharp
+
+```
+
+[Volver a Indice](#tabla-de-contenido)
