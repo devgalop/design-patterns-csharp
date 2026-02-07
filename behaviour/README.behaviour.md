@@ -563,8 +563,124 @@ El patrón **Mediator** nos permite simplificar la comunicación entre los objet
 
 - **Ejemplo**
 
-```csharp
+El patrón **Mediator** se puede ejemplificar usando el siguiente escenario: Una compañía tiene dentro de su operación varías areas encargadas de llevar a cabo un pedido del cliente. El área comercial se encarga de tomar el pedido del cliente, el área de almacenamiento organiza los productos y embala el pedido, el area de transporte se encarga de llevarlo al cliente. Para que esta operación salga bien, cada área debe comunicar a los demás el estado de su proceso. 
 
+Usando el patrón **Mediator** se sustituyen las dependencias entre áreas y se asigna a una clase mediadora que ayuda a validar los estados, activar o desactivas procesos.
+
+```csharp
+// Interfaz del Mediador
+public interface IMediator
+{
+    void Notify(object sender, string eventMessage);
+}
+
+// Clase Mediador Concreto
+public class OrderMediator : IMediator
+{
+    private Commercial _commercial;
+    private Storage _storage;
+    private Transport _transport;
+
+    public void SetCommercial(Commercial commercial)
+    {
+        _commercial = commercial;
+        _commercial.SetMediator(this);
+    }
+
+    public void SetStorage(Storage storage)
+    {
+        _storage = storage;
+        _storage.SetMediator(this);
+    }
+
+    public void SetTransport(Transport transport)
+    {
+        _transport = transport;
+        _transport.SetMediator(this);
+    }
+
+    public void Notify(object sender, string eventMessage)
+    {
+        if (eventMessage == "OrderReceived")
+        {
+            Console.WriteLine("Mediator: Comercial ha recibido un pedido. Notificando a Almacenamiento...");
+            _storage.PrepareOrder();
+        }
+        else if (eventMessage == "OrderPrepared")
+        {
+            Console.WriteLine("Mediator: Almacenamiento ha preparado el pedido. Notificando a Transporte...");
+            _transport.DeliverOrder();
+        }
+        else if (eventMessage == "OrderDelivered")
+        {
+            Console.WriteLine("Mediator: Transporte ha entregado el pedido. Operación completada.");
+        }
+    }
+}
+
+// Interfaz Colleague
+public abstract class Department
+{
+    protected IMediator _mediator;
+
+    public void SetMediator(IMediator mediator)
+    {
+        _mediator = mediator;
+    }
+}
+
+// Clase Comercial (Concrete Colleague)
+public class Commercial : Department
+{
+    public void ReceiveOrder()
+    {
+        Console.WriteLine("Comercial: Pedido recibido del cliente.");
+        _mediator.Notify(this, "OrderReceived");
+    }
+}
+
+// Clase Almacenamiento (Concrete Colleague)
+public class Storage : Department
+{
+    public void PrepareOrder()
+    {
+        Console.WriteLine("Almacenamiento: Preparando y embalando el pedido.");
+        _mediator.Notify(this, "OrderPrepared");
+    }
+}
+
+// Clase Transporte (Concrete Colleague)
+public class Transport : Department
+{
+    public void DeliverOrder()
+    {
+        Console.WriteLine("Transporte: Entregando el pedido al cliente.");
+        _mediator.Notify(this, "OrderDelivered");
+    }
+}
+
+// Ejemplo de uso
+class Program
+{
+    static void Main(string[] args)
+    {
+        // Crear el mediador
+        var mediator = new OrderMediator();
+
+        // Crear los departamentos
+        var commercial = new Commercial();
+        var storage = new Storage();
+        var transport = new Transport();
+
+        // Configurar el mediador con los departamentos
+        mediator.SetCommercial(commercial);
+        mediator.SetStorage(storage);
+        mediator.SetTransport(transport);
+
+        // Iniciar el proceso desde el área comercial
+        commercial.ReceiveOrder();
+    }
+}
 ```
 
 [Volver a Indice](#tabla-de-contenido)
