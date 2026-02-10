@@ -563,7 +563,7 @@ El patrón **Mediator** nos permite simplificar la comunicación entre los objet
 
 - **Ejemplo**
 
-El patrón **Mediator** se puede ejemplificar usando el siguiente escenario: Una compañía tiene dentro de su operación varías areas encargadas de llevar a cabo un pedido del cliente. El área comercial se encarga de tomar el pedido del cliente, el área de almacenamiento organiza los productos y embala el pedido, el area de transporte se encarga de llevarlo al cliente. Para que esta operación salga bien, cada área debe comunicar a los demás el estado de su proceso. 
+El patrón **Mediator** se puede ejemplificar usando el siguiente escenario: Una compañía tiene dentro de su operación varías areas encargadas de llevar a cabo un pedido del cliente. El área comercial se encarga de tomar el pedido del cliente, el área de almacenamiento organiza los productos y embala el pedido, el area de transporte se encarga de llevarlo al cliente. Para que esta operación salga bien, cada área debe comunicar a los demás el estado de su proceso.
 
 Usando el patrón **Mediator** se sustituyen las dependencias entre áreas y se asigna a una clase mediadora que ayuda a validar los estados, activar o desactivas procesos.
 
@@ -679,6 +679,155 @@ class Program
 
         // Iniciar el proceso desde el área comercial
         commercial.ReceiveOrder();
+    }
+}
+```
+
+[Volver a Indice](#tabla-de-contenido)
+
+---
+
+## Memento
+
+- **Definición**
+
+El patrón **Memento** permite realizar una captura del estado actual de un objeto sin la necesidad de exponer sus detalles internos. Esta captura es guardada con el objetivo de poder restaurar versiones anteriores del objeto.
+
+- **¿Cuándo usar este patrón?**
+
+✅ **Úsalo cuando:**
+
+- Necesitas guardar el estado de un objeto para restaurarlo más tarde.
+- Quieres implementar una funcionalidad de deshacer/rehacer en tu aplicación.
+- Deseas evitar exponer detalles internos del estado de un objeto.
+
+❌ **NO lo uses cuando:**
+
+- El almacenamiento del estado completo del objeto es demasiado costoso en términos de memoria.
+- No necesitas restaurar estados previos del objeto.
+- El estado del objeto puede ser reconstruido fácilmente sin necesidad de un memento.
+
+💡 **Señal de sobreingeniería:**
+
+- Estás almacenando demasiados mementos, lo que consume una cantidad excesiva de memoria.
+- El sistema no requiere realmente la funcionalidad de deshacer/rehacer, pero se implementa de todos modos.
+- Los mementos contienen demasiada información, lo que complica su gestión y mantenimiento.
+
+- **¿Cuales son sus componentes?**
+
+  - **Originator**: Este es el encargado de crear y mantener el estado de un objeto. Se comunica directamente con el memento para crear una captura del estado actual.
+  - **Memento**: Almacena el estado actual del Originator en un punto determinado de tiempo. Solo provee una forma de retornar el estado sin realizar cambios directos.
+  - **Caretaker**: Es el responsable de almacenar y hacer un registro de los objetos Mementos. No conoce los detalles del estado, su función es almacenar o pedir mementos desde el Originator para restaurar versiones o deshacer cambios.
+
+- **Diagrama de clases**
+
+![diagrama_command](resources/memento_components.drawio.png)
+
+- **Ejemplo**
+
+Uno de los ejemplos más usados para representar el beneficio del patrón **Memento** suele ser un editor de texto o un video juego ya que estos tienen la posibilidad de restaurar y deshacer comportamientos. Para este caso en particular utilizaremos el video juego.
+
+Supongamos que tenemos un personaje que a medida que avanza el video juego va adquiriendo objetos en el inventario, dentro del juego hay checkpoints ya que si algo le llega a pasar al personaje, es posible reaparecer con el estado del último checkpoint.
+
+```csharp
+public class GameCharacter
+{
+    public string Name { get; private set; }
+    public int Health { get; private set; }
+    public List<string> Inventory { get; private set; }
+
+    public GameCharacter(string name)
+    {
+        Name = name;
+        Health = 100;
+        Inventory = new List<string>();
+    }
+
+    public void AddToInventory(string item)
+    {
+        Inventory.Add(item);
+    }
+
+    public void ReduceHealth(int damage)
+    {
+        Health -= damage;
+    }
+
+    public CharacterMemento SaveState()
+    {
+        return new CharacterMemento(Name, Health, new List<string>(Inventory));
+    }
+
+    public void RestoreState(CharacterMemento memento)
+    {
+        Name = memento.Name;
+        Health = memento.Health;
+        Inventory = new List<string>(memento.Inventory);
+    }
+
+    public override string ToString()
+    {
+        return $"Name: {Name}, Health: {Health}, Inventory: [{string.Join(", ", Inventory)}]";
+    }
+}
+
+public class CharacterMemento
+{
+    public string Name { get; }
+    public int Health { get; }
+    public List<string> Inventory { get; }
+
+    public CharacterMemento(string name, int health, List<string> inventory)
+    {
+        Name = name;
+        Health = health;
+        Inventory = inventory;
+    }
+}
+
+public class CheckpointManager
+{
+    private readonly Stack<CharacterMemento> _checkpoints = new();
+
+    public void SaveCheckpoint(CharacterMemento memento)
+    {
+        _checkpoints.Push(memento);
+    }
+
+    public CharacterMemento RestoreCheckpoint()
+    {
+        return _checkpoints.Count > 0 ? _checkpoints.Pop() : null;
+    }
+}
+
+// Ejemplo de uso
+class Program
+{
+    static void Main(string[] args)
+    {
+        var character = new GameCharacter("Hero");
+        var checkpointManager = new CheckpointManager();
+
+        character.AddToInventory("Sword");
+        checkpointManager.SaveCheckpoint(character.SaveState());
+
+        character.AddToInventory("Shield");
+        character.ReduceHealth(50);
+        checkpointManager.SaveCheckpoint(character.SaveState());
+
+        character.AddToInventory("Potion");
+        character.ReduceHealth(30);
+
+        Console.WriteLine("Estado actual del personaje:");
+        Console.WriteLine(character);
+
+        Console.WriteLine("\nRestaurando al último checkpoint...");
+        character.RestoreState(checkpointManager.RestoreCheckpoint());
+        Console.WriteLine(character);
+
+        Console.WriteLine("\nRestaurando al checkpoint inicial...");
+        character.RestoreState(checkpointManager.RestoreCheckpoint());
+        Console.WriteLine(character);
     }
 }
 ```
