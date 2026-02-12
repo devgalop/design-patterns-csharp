@@ -23,9 +23,9 @@ A continuación se desarrollan para cada uno de los patrones creacionales los si
 1. [Chain of Responsibility (CoR)](#chain-of-responsibility-cor)
 2. [Command](#command)
 3. [Iterator](#iterator)
-4. [Mediator](#tabla-de-contenido)
-5. [Memento](#tabla-de-contenido)
-6. [Observer](#tabla-de-contenido)
+4. [Mediator](#mediator)
+5. [Memento](#memento)
+6. [Observer](#observer)
 7. [State](#tabla-de-contenido)
 8. [Strategy](#tabla-de-contenido)
 9. [Template Method](#tabla-de-contenido)
@@ -830,6 +830,53 @@ class Program
         Console.WriteLine(character);
     }
 }
+```
+
+[Volver a Indice](#tabla-de-contenido)
+
+---
+
+## Observer
+
+- **Definición**
+
+El patrón de comportamiento **Observer** permite crear una relación de uno a muchos, definiendo un mecanismo de subscripción para notificar a muchos objetos cuando ocurra un evento en el objeto observado. Una vez el estado actual del objeto observado cambie, todos los observadores son notificados para asegurar una comunicación sincronizada.
+
+- **¿Cuándo usar este patrón?**
+
+✅ **Úsalo cuando:**
+
+- Necesitas notificar a múltiples objetos sobre cambios en el estado de otro objeto.
+- Quieres asegurar que los objetos dependientes estén sincronizados automáticamente con el estado del objeto observado.
+- Deseas implementar un sistema de eventos donde los suscriptores puedan registrarse y recibir notificaciones de cambios.
+
+❌ **NO lo uses cuando:**
+
+- Hay una relación de dependencia compleja entre los observadores y el sujeto, lo que puede dificultar el mantenimiento.
+- El número de observadores es muy grande y puede afectar el rendimiento del sistema debido a la cantidad de notificaciones.
+- Los observadores necesitan saber demasiado sobre el estado interno del sujeto para reaccionar adecuadamente.
+
+💡 **Señal de sobreingeniería:**
+
+- Tienes pocos observadores o ninguno, lo que hace innecesario el uso del patrón.
+- La implementación del patrón introduce una complejidad innecesaria en un sistema simple.
+- Los observadores no reaccionan de manera significativa a los cambios del sujeto, lo que indica que el patrón no está aportando valor.
+
+- **¿Cuales son sus componentes?**
+
+  - **Subject**: Interfaz que promueve los métodos para agregar, remover y notificar observadores. Contiene una lista de observadores.
+  - **Observer**: Interfaz común que deben implementar todos los observadores con un método Update() que permite actualizar todos los observadores de forma sincronizada.
+  - **Concrete Subjects**: Implementación concreta de la interfaz subject, cuando un estado cambia, se encarga de notificar a todos los observadores.
+  - **Concrete Observers**: Implementación concreta de la interfaz observer, se encarga de reaccionar al evento publicado por el sujeto.
+
+- **Diagrama de clases**
+
+![diagrama_command](resources/observer_components.drawio.png)
+
+- **Ejemplo**
+
+```csharp
+
 ```
 
 [Volver a Indice](#tabla-de-contenido)
