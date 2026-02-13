@@ -35,7 +35,7 @@ A continuación se desarrollan para cada uno de los patrones creacionales los si
 
 - **Definición**
 
-El patrón **Chain of Responsibility** nos permite pasar peticionnes entre diferentes handlers que se encuentran en una cadena de procesos.Cada handler está en la potestad de evaluar si puede procesar una petición o si la delega al siguiente handler.
+El patrón **Chain of Responsibility** nos permite pasar peticiones entre diferentes handlers que se encuentran en una cadena de procesos.Cada handler está en la potestad de evaluar si puede procesar una petición o si la delega al siguiente handler.
 
 - **¿Cuándo usar este patrón?**
 
@@ -197,7 +197,7 @@ public sealed class SupportCriticalHandler : ISupportTaskHandler{
 
 - **Definición**
 
-El patrón **Command** permite encapsular peticiones dentro de un objeto, desacoplando el Sender del Receiver. Este patrón permite que las peticiones sean pasadas como argumentos, encoladas, logueadas dentro de un historial de comandos o incluso tener operaciones reversibles.
+El patrón **Command** permite encapsular peticiones dentro de un objeto, desacoplando el emisor del receptor. Este patrón permite que las peticiones sean pasadas como argumentos, encoladas, logueadas dentro de un historial de comandos o incluso tener operaciones reversibles.
 
 - **¿Cuándo usar este patrón?**
 
@@ -875,7 +875,91 @@ El patrón de comportamiento **Observer** permite crear una relación de uno a m
 
 - **Ejemplo**
 
+Para ejemplificar el patrón **Observer** supongamos que tenemos un sistema educativo, donde cada docente escribe un newsletter que le permite mostrar algún tema de interes. Los usuarios interesados en aprender sobre tecnología se pueden subscribir para que semanalmente les llegue al correo la notificación informando la publicación.
+
 ```csharp
+
+//Interfaz Subject
+public interface IPublisher{
+    void AddSubscriber(ISubscriber subscriber);
+    void RemoveSubscriber(ISubscriber subscriber);
+    Task Notify();
+}
+
+//Interfaz Observer
+public interface ISubscriber{
+    string Email {get;}
+    Task Update();
+}
+
+//Concrete Subject
+public sealed class Writer() : IPublisher{
+    private List<ISubscriber> readers = new();
+
+    public void AddSubscriber(ISubscriber subscriber){
+        if(subscriber is null) return;
+        readers.Add(subscriber);
+    }
+
+    public void RemoveSubscriber(ISubscriber subscriber){
+        if(subscriber is null) return;
+        var subscriberFound = readers.FirstOrDefault(s => s.Email == subscriber.Email);
+        if(subscriberFound is null) return;
+        readers.Remove(subscriberFound);
+    }
+
+    public async Task Notify(){
+        foreach (ISubscriber reader in readers){
+            await reader.Update();
+        }
+    }
+}
+
+//Concrete Observers
+public sealed class Reader : ISubscriber
+{
+    public string Email { get; }
+
+    public Reader(string email)
+    {
+        Email = email;
+    }
+
+    public async Task Update()
+    {
+        // Simular envío de correo electrónico
+        await Task.Delay(500); // Simula un retraso en el envío del correo
+        Console.WriteLine($"Notificación enviada a: {Email}");
+    }
+}
+
+class Program
+{
+    static async Task Main(string[] args)
+    {
+        // Crear el sujeto (Writer)
+        var writer = new Writer();
+
+        // Crear observadores (Readers)
+        var reader1 = new Reader("reader1@example.com");
+        var reader2 = new Reader("reader2@example.com");
+
+        // Suscribir observadores al sujeto
+        writer.AddSubscriber(reader1);
+        writer.AddSubscriber(reader2);
+
+        // Notificar a los observadores
+        Console.WriteLine("Notificando a los suscriptores...");
+        await writer.Notify();
+
+        // Eliminar un suscriptor
+        writer.RemoveSubscriber(reader1);
+
+        // Notificar nuevamente
+        Console.WriteLine("Notificando a los suscriptores después de eliminar uno...");
+        await writer.Notify();
+    }
+}
 
 ```
 
