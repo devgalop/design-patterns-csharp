@@ -966,3 +966,169 @@ class Program
 [Volver a Indice](#tabla-de-contenido)
 
 ---
+
+## State
+
+- **Definición**
+
+Este patrón permite que un objeto altere su comportamiento cuando su estado interno cambia. Este encapsula el comportamiento especifico de un estado dentro de clases separadas, permitiendo que el objeto maneje sus diferentes estados de forma limpia, evitando condicionales complejos.
+
+Esta patrón esta muy relacionado con una maquina de estados finitos [ver más...](https://refactoring.guru/design-patterns/state)
+
+- **¿Cuándo usar este patrón?**
+
+✅ **Úsalo cuando:**
+
+- Un objeto tiene múltiples estados bien definidos y su comportamiento cambia radicalmente según el estado actual.
+- Tienes grandes estructuras condicionales (if/switch statements) basadas en el estado del objeto.
+- Los cambios de estado son frecuentes y predecibles, y necesitas una forma limpia de gestionarlos.
+- Quieres evitar afectar a otras partes del sistema cuando cambias la lógica específica de un estado.
+- Necesitas implementar una máquina de estados finita con transiciones claras entre estados.
+- Diferentes estados requieren algoritmos completamente diferentes.
+
+❌ **NO lo uses cuando:**
+
+- El objeto tiene solo uno o dos estados simples sin lógica compleja asociada.
+- El comportamiento del objeto no cambia significativamente entre estados.
+- Tienes un número muy grande de estados (más de 10-15), lo que haría el diseño difícil de mantener.
+- Las transiciones entre estados son triviales o pueden resolverse con simples banderas booleanas.
+- Los cambios de estado son raros o no ocurren en tiempo de ejecución.
+
+💡 **Señal de sobreingeniería:**
+
+- Creas múltiples clases de estado para comportamientos que son casi idénticos o muy simples.
+- El patrón introduce más complejidad en el código que la que tenías con simples condicionales.
+- Tienes clases de estado que casi nunca se usan o que contienen muy poca lógica.
+- La mayoría de los métodos de estado hacen poco más que llamar a métodos del contexto.
+- Las transiciones de estado son tan complejas que resultan difíciles de entender y mantener.
+
+- **¿Cuales son sus componentes?**
+
+  - **Context**: Esta clase mantiene una referencia con el estado actual, es la interfaz con la que se comunica el cliente.
+  - **State**: Interfaz común que tiene todos los métodos ejecutables de un estado.
+  - **Concrete States**: Implementación concreta de cada estado, encapsulando el comportamiento del estado especifico.
+
+- **Diagrama de clases**
+
+![diagrama_state](resources/state_components.drawio.png)
+
+- **Ejemplo**
+
+Supongamos que tenemos un sistema de soporte al cliente, donde los clientes envían tickets, estos tienen diferentes estados: Sin asignar, En proceso, Resuelto, Cerrado. Dependiendo del estado, el ticket va a tener un comportamiento diferente, por ejemplo, si el ticket esta sin asignar, se le puede asignar un agente. Si el ticket esta en proceso, se le puede agregar una nota o marcarlo como resuelto. Si el ticket esta resuelto, se le puede marcar como cerrado o reabrirlo.
+
+```csharp
+public enum EState
+{
+    UNASSIGNED,
+    IN_PROGRESS,
+    RESOLVED,
+    CLOSED
+}
+
+public record RequestTicket(
+    string Title, 
+    string Description,
+    EState State
+);
+
+public interface ITicketState
+{
+    Task Handle(RequestTicket ticket);
+}
+
+public sealed class UnassignedState : ITicketState
+{
+    public async Task Handle(RequestTicket ticket)
+    {
+        //Añade lógica para asignar un agente al ticket
+        Console.WriteLine("Ticket sin asignar, asignando agente...");
+    }
+}
+
+public sealed class InProgressState : ITicketState
+{
+    public async Task Handle(RequestTicket ticket)
+    {
+        //Añade lógica para agregar una nota o marcar como resuelto
+        Console.WriteLine("Ticket en proceso, agregando nota...");
+        bool isResolved = true; // Simula la resolución del ticket
+        if (isResolved)
+        {
+            ticket = ticket with { State = EState.RESOLVED };
+            Console.WriteLine("Ticket marcado como resuelto.");
+        }
+    }
+}
+
+public sealed class ResolvedState : ITicketState
+{
+    public async Task Handle(RequestTicket ticket)
+    {
+        //Añade lógica para marcar como cerrado o reabrir el ticket
+        Console.WriteLine("Ticket resuelto, marcando como cerrado...");
+        bool isClosed = true; // Simula el cierre del ticket
+        if (isClosed)
+        {
+            ticket = ticket with { State = EState.CLOSED };
+            Console.WriteLine("Ticket marcado como cerrado.");
+        }
+    }
+}
+
+public sealed class ClosedState : ITicketState
+{
+    public async Task Handle(RequestTicket ticket)
+    {
+        //Añade lógica para reabrir el ticket
+        Console.WriteLine("Ticket cerrado, reabriendo...");
+        bool isReopened = true; // Simula la reapertura del ticket
+        if (isReopened)
+        {
+            ticket = ticket with { State = EState.IN_PROGRESS };
+            Console.WriteLine("Ticket reabierto y marcado como en proceso.");
+        }
+    }
+}
+
+public class TicketContext(ITicketState state)
+{
+    private ITicketState _state;
+
+    public void SetState(ITicketState state)
+    {
+        _state = state;
+    }
+
+    public async Task Handle(RequestTicket ticket)
+    {
+        await _state.Handle(ticket);
+    }
+}
+
+// Ejemplo de uso
+class Program
+{
+    static async Task Main(string[] args)
+    {
+        var ticket = new RequestTicket("Problema con la aplicación", "La aplicación se cierra inesperadamente.", EState.UNASSIGNED);
+        var context = new TicketContext(new UnassignedState());
+
+        Console.WriteLine($"Estado inicial del ticket: {ticket.State}");
+        await context.Handle(ticket);
+
+        context.SetState(new InProgressState());
+        await context.Handle(ticket);
+
+        context.SetState(new ResolvedState());
+        await context.Handle(ticket);
+
+        context.SetState(new ClosedState());
+        await context.Handle(ticket);
+    }
+}
+
+```
+
+[Volver a Indice](#tabla-de-contenido)
+
+---
