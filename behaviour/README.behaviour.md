@@ -1092,7 +1092,7 @@ public sealed class ClosedState : ITicketState
 
 public class TicketContext(ITicketState state)
 {
-    private ITicketState _state;
+    private ITicketState _state = state;
 
     public void SetState(ITicketState state)
     {
@@ -1132,3 +1132,119 @@ class Program
 [Volver a Indice](#tabla-de-contenido)
 
 ---
+
+## Strategy
+
+- **Definición**
+
+Este patrón define un grupo de algoritmos relacionados, encapsula cada uno de ellos y los hace intercambiables. El patrón Strategy permite que el algoritmo varíe independientemente de los clientes que lo utilizan, permitiendo que el cliente pueda elegir el algoritmo a utilizar en tiempo de ejecución.
+
+- **¿Cuándo usar este patrón?**
+
+✅ **Úsalo cuando:**
+
+- Tienes varias formas de realizar una operación y quieres que el algoritmo pueda cambiarse en tiempo de ejecución.
+- Quieres evitar estructuras condicionales complejas (if/switch) para seleccionar el algoritmo a utilizar.
+- Deseas que los algoritmos sean independientes y fácilmente intercambiables o extensibles.
+- Necesitas que los algoritmos puedan ser reutilizados en diferentes contextos.
+
+❌ **NO lo uses cuando:**
+
+- Solo tienes un algoritmo o la variación entre algoritmos es mínima.
+- El algoritmo rara vez cambia o no se requiere flexibilidad en la selección del mismo.
+- El costo de crear múltiples clases para cada estrategia supera los beneficios de flexibilidad.
+
+💡 **Señal de sobreingeniería:**
+
+- Creas estrategias para algoritmos triviales o que no justifican la abstracción.
+- El número de estrategias crece innecesariamente y la mayoría no se usan.
+- El patrón introduce más complejidad que la que resuelve, especialmente si los algoritmos no cambian.
+
+- **¿Cuales son sus componentes?**
+
+  - **Context**: Mantiene una referencia a una instancia de una estrategia concreta y se comunica con ella para ejecutar el algoritmo.
+  - **Strategy**: Interfaz común que define el contrato para todas las estrategias concretas.
+  - **Concrete Strategies**: Implementación concreta de cada estrategia, encapsulando un algoritmo específico.
+
+- **Diagrama de clases**
+
+![diagrama_strategy](resources/strategy_components.drawio.png)
+
+- **Ejemplo**
+
+Supongamos que tenemos un sistema de procesamiento de pagos, donde los clientes pueden elegir entre diferentes métodos de pago como tarjeta de crédito, PayPal o transferencia bancaria. Cada método de pago tiene su propia lógica de procesamiento, pero el cliente puede cambiar el método de pago en tiempo de ejecución.
+
+```csharp
+public interface IPaymentStrategy
+{
+    void Pay(decimal amount);
+}
+
+public class CreditCardPayment : IPaymentStrategy
+{
+    public void Pay(decimal amount)
+    {
+        Console.WriteLine($"Procesando pago de {amount} con tarjeta de crédito.");
+    }
+}
+
+public class PayPalPayment : IPaymentStrategy
+{
+    public void Pay(decimal amount)
+    {
+        Console.WriteLine($"Procesando pago de {amount} con PayPal.");
+    }
+}
+
+public class BankTransferPayment : IPaymentStrategy
+{
+    public void Pay(decimal amount)
+    {
+        Console.WriteLine($"Procesando pago de {amount} con transferencia bancaria.");
+    }
+}
+
+public class PaymentContext
+{
+    private IPaymentStrategy _paymentStrategy;
+
+    public void SetPaymentStrategy(IPaymentStrategy paymentStrategy)
+    {
+        _paymentStrategy = paymentStrategy;
+    }
+
+    public void Pay(decimal amount)
+    {
+        if (_paymentStrategy == null)
+        {
+            Console.WriteLine("No se ha seleccionado un método de pago.");
+            return;
+        }
+        _paymentStrategy.Pay(amount);
+    }
+}
+
+// Ejemplo de uso
+class Program
+{
+    static void Main(string[] args)
+    {
+        var paymentContext = new PaymentContext();
+
+        // El cliente elige pagar con tarjeta de crédito
+        paymentContext.SetPaymentStrategy(new CreditCardPayment());
+        paymentContext.Pay(100);
+
+        // El cliente decide cambiar a PayPal
+        paymentContext.SetPaymentStrategy(new PayPalPayment());
+        paymentContext.Pay(200);
+
+        // El cliente decide cambiar a transferencia bancaria
+        paymentContext.SetPaymentStrategy(new BankTransferPayment());
+        paymentContext.Pay(300);
+    }
+}
+
+```
+
+[Volver a Indice](#tabla-de-contenido)
