@@ -26,10 +26,10 @@ A continuación se desarrollan para cada uno de los patrones creacionales los si
 4. [Mediator](#mediator)
 5. [Memento](#memento)
 6. [Observer](#observer)
-7. [State](#tabla-de-contenido)
-8. [Strategy](#tabla-de-contenido)
-9. [Template Method](#tabla-de-contenido)
-10. [Visitor](#tabla-de-contenido)
+7. [State](#state)
+8. [Strategy](#strategy)
+9. [Template Method](#template-method)
+10. [Visitor](#visitor)
 
 ### Chain of Responsibility (CoR)
 
@@ -1244,6 +1244,153 @@ class Program
         paymentContext.Pay(300);
     }
 }
+
+```
+
+[Volver a Indice](#tabla-de-contenido)
+
+---
+
+## Template Method
+
+- **Definición**
+
+El patrón **Template Method** define el esqueleto de un algoritmo en una operación, dejando algunos pasos a ser implementados por las subclases. Este patrón permite que las subclases redefinan ciertos pasos de un algoritmo sin cambiar su estructura general.
+
+- **¿Cuándo usar este patrón?**
+
+✅ **Úsalo cuando:**
+
+- Tienes un algoritmo que tiene una estructura general fija, pero algunos pasos pueden variar entre implementaciones.
+- Quieres evitar la duplicación de código en algoritmos similares que solo difieren en algunos pasos.
+- Deseas permitir que las subclases redefinan ciertos pasos de un algoritmo sin cambiar la estructura general.
+- Necesitas controlar el flujo de un algoritmo y garantizar que ciertos pasos siempre se ejecuten en un orden específico.
+
+❌ **NO lo uses cuando:**
+
+- El algoritmo no tiene pasos fijos o la variación entre implementaciones es mínima.
+- Los pasos variables no justifican la creación de una jerarquía de clases.
+- Puedes resolver el problema de manera más simple usando composición o delegación en lugar de herencia.
+- El algoritmo es tan simple que no requiere una estructura formal.
+
+💡 **Señal de sobreingeniería:**
+
+- Creas clases abstractas y métodos plantilla para algoritmos triviales o con poca variación.
+- La jerarquía de clases crece innecesariamente solo para soportar pequeñas diferencias en el comportamiento.
+- Los métodos plantilla se usan en exceso y la mayoría de las subclases solo implementan detalles mínimos.
+- El patrón introduce más complejidad que la que resuelve, especialmente si los pasos variables podrían implementarse con funciones simples o lambdas.
+
+- **¿Cuales son sus componentes?**
+
+  - **Abstract Class**: Define el esqueleto del algoritmo, incluyendo los pasos que deben ser implementados por las subclases.
+  - **Concrete Class**: Implementa los pasos específicos del algoritmo definidos en la clase abstracta.
+
+- **Diagrama de clases**
+
+![diagrama_template_method](resources/template_method_components.drawio.png)
+
+- **Ejemplo**
+
+Supongamos que tenemos un sistema para la generación de reportes, donde cada tipo de reporte tiene una estructura general similar pero con pasos específicos que varían según el tipo de reporte. Por ejemplo, un reporte de ventas y un reporte de inventario pueden compartir la misma estructura general, pero los datos que se recopilan y cómo se formatean pueden ser diferentes.
+
+```csharp
+public abstract class ReportGenerator
+{
+    public void GenerateReport()
+    {
+        CollectData();
+        AnalyzeData();
+        FormatReport();
+        PrintReport();
+    }
+
+    protected abstract void CollectData();
+    protected abstract void AnalyzeData();
+    protected abstract void FormatReport();
+
+    private void PrintReport()
+    {
+        Console.WriteLine("Imprimiendo el reporte...");
+    }
+}
+
+public class SalesReportGenerator : ReportGenerator
+{
+    protected override void CollectData()
+    {
+        Console.WriteLine("Recopilando datos de ventas...");
+    }
+
+    protected override void AnalyzeData()
+    {
+        Console.WriteLine("Analizando datos de ventas...");
+    }
+
+    protected override void FormatReport()
+    {
+        Console.WriteLine("Formateando reporte de ventas...");
+    }
+}
+
+public class InventoryReportGenerator : ReportGenerator
+{
+    protected override void CollectData()
+    {
+        Console.WriteLine("Recopilando datos de inventario...");
+    }
+
+    protected override void AnalyzeData()
+    {
+        Console.WriteLine("Analizando datos de inventario...");
+    }
+
+    protected override void FormatReport()
+    {
+        Console.WriteLine("Formateando reporte de inventario...");
+    }
+}
+
+// Ejemplo de uso
+class Program
+{
+    static void Main(string[] args)
+    {
+        ReportGenerator salesReport = new SalesReportGenerator();
+        salesReport.GenerateReport();
+
+        Console.WriteLine();
+
+        ReportGenerator inventoryReport = new InventoryReportGenerator();
+        inventoryReport.GenerateReport();
+    }
+}
+```
+
+[Volver a Indice](#tabla-de-contenido)
+
+---
+
+## Visitor
+
+- **Definición**
+
+- **¿Cuándo usar este patrón?**
+
+✅ **Úsalo cuando:**
+
+❌ **NO lo uses cuando:**
+
+💡 **Señal de sobreingeniería:**
+
+- **¿Cuales son sus componentes?**
+
+- **Diagrama de clases**
+
+![diagrama_strategy](resources/strategy_components.drawio.png)
+
+- **Ejemplo**
+
+```csharp
 
 ```
 
