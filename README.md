@@ -21,3 +21,9 @@ Los patrones de arquitectura son los más universales, son soluciones a alto niv
 - **Patrones Estructurales**: Estos patrones nos enseñan como organizar y componer clases u objetos para formar sistemas complejos de manera sencilla. [ver más...](structurals/README.structurals.md)
 
 - **Patrones de Comportamiento**: Estos patrones se encargan de cómo se comunican, interactuan y se dividen responsabilidades los objetos. [ver más...](behaviour/README.behaviour.md)
+
+## Árbol de desiciones para elegir el patrón de diseño adecuado
+
+Aprender los conceptos de cada patrón de diseño es importante, pero también lo es saber cuándo y cómo aplicarlos. Para esto, se puede usar un árbol de decisiones que nos guíe a través de una serie de preguntas para identificar el patrón de diseño más adecuado para nuestro problema específico. [Para profundizar más sobre este tema, puedes visitar este recurso](https://medium.com/womenintechnology/stop-memorizing-design-patterns-use-this-decision-tree-instead-e84f22fca9fa)
+
+![arbol_decision](decision_tree_design_paterns.drawio.png)
