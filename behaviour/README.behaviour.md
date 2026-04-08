@@ -1374,24 +1374,126 @@ class Program
 
 - **Definición**
 
+El patrón **Visitor** permite agregar nuevas operaciones a una clase preexistente sin modificar su estructura. Este patrón se basa en la idea de separar un algoritmo de la estructura de objetos sobre la que opera, permitiendo que el algoritmo pueda variar independientemente de los objetos.
+
 - **¿Cuándo usar este patrón?**
 
 ✅ **Úsalo cuando:**
 
+- Tienes una estructura de objetos compleja y necesitas agregar nuevas operaciones sin modificar las clases existentes.
+- Quieres separar algoritmos de la estructura de datos sobre la que operan.
+- Necesitas realizar operaciones que involucren muchas clases de una jerarquía sin acoplarlas a las operaciones.
+- Requieres agregar funcionalidades a una familia de objetos sin alterar su código fuente.
+
 ❌ **NO lo uses cuando:**
+
+- La jerarquía de clases es estable y rara vez cambian las operaciones.
+- Las operaciones a agregar son pocas y no justifican la complejidad del patrón.
+- Los elementos a visitar cambian frecuentemente, ya que cada cambio requiere modificar todos los visitantes.
+- El acceso a los atributos internos de los elementos puede romper el encapsulamiento.
 
 💡 **Señal de sobreingeniería:**
 
+- Implementas Visitor para jerarquías simples o con pocas operaciones, añadiendo complejidad innecesaria.
+- El número de visitantes crece rápidamente y la mayoría solo implementa lógica trivial.
+- Los visitantes requieren acceso a demasiados detalles internos de los elementos, rompiendo el encapsulamiento.
+- El patrón introduce más clases y métodos de los que realmente se necesitan para el problema actual.
+
 - **¿Cuales son sus componentes?**
+  
+  - **Visitor**: Define una interfaz para visitar cada tipo de elemento en la estructura de objetos. Cada método de visita corresponde a un tipo específico de elemento.
+  - **Concrete Visitor**: Implementa la interfaz Visitor, definiendo la operación específica para cada tipo de elemento.
+  - **Element**: Define una interfaz que acepta un visitante como argumento.
+  - **Concrete Element**: Implementa la interfaz Element, permitiendo que el visitante acceda a su información.
 
 - **Diagrama de clases**
 
-![diagrama_strategy](resources/strategy_components.drawio.png)
+![diagrama_visitor](resources/visitor_components.drawio.png)
 
 - **Ejemplo**
 
-```csharp
+Supongamos que tenemos una estructura de objetos que representa diferentes tipos de documentos, como un documento de texto, una hoja de cálculo y una presentación. Queremos agregar una operación para exportar estos documentos a diferentes formatos (PDF, Word, Excel) sin modificar las clases de los documentos.
 
+```csharp
+// Interfaz Visitor
+public interface IDocumentVisitor
+{
+    void Visit(TextDocument textDocument);
+    void Visit(SpreadsheetDocument spreadsheetDocument);
+    void Visit(PresentationDocument presentationDocument);
+}
+
+// Concrete Visitor
+public class ExportVisitor : IDocumentVisitor
+{
+    public void Visit(TextDocument textDocument)
+    {
+        Console.WriteLine("Exportando documento de texto a PDF...");
+    }
+
+    public void Visit(SpreadsheetDocument spreadsheetDocument)
+    {
+        Console.WriteLine("Exportando hoja de cálculo a Excel...");
+    }
+
+    public void Visit(PresentationDocument presentationDocument)
+    {
+        Console.WriteLine("Exportando presentación a PowerPoint...");
+    }
+}
+
+// Interfaz Element
+public interface IDocument
+{
+    void Accept(IDocumentVisitor visitor);
+}
+
+// Concrete Elements
+public class TextDocument : IDocument
+{
+    public void Accept(IDocumentVisitor visitor)
+    {
+        visitor.Visit(this);
+    }
+}
+
+public class SpreadsheetDocument : IDocument
+{
+    public void Accept(IDocumentVisitor visitor)
+    {
+        visitor.Visit(this);
+    }
+}
+
+public class PresentationDocument : IDocument
+{
+    public void Accept(IDocumentVisitor visitor)
+    {
+        visitor.Visit(this);
+    }
+}
+
+
+// Ejemplo de uso
+class Program
+{
+    static void Main(string[] args)
+    {
+        var documents = new List<IDocument>
+        {
+            new TextDocument(),
+            new SpreadsheetDocument(),
+            new PresentationDocument()
+        };
+
+        var exportVisitor = new ExportVisitor();
+
+        foreach (var document in documents)
+        {
+            document.Accept(exportVisitor);
+        }
+    }
+}
 ```
 
 [Volver a Indice](#tabla-de-contenido)
